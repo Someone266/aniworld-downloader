@@ -1,3 +1,7 @@
+# Diese Version ist veraltet und funktioniert möglicherweise nicht mehr.
+
+Bitte benutze immer die neuste Version
+
 # Aniworld Down
 
 Aniworld Down ist ein Tool, um Videos von AniWorld (ehemalig AniCloud) herunterzuladen und zu organisieren.
