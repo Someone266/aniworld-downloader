@@ -24,7 +24,7 @@ soon
 
 ### Windows
 
-- Führe einfach `AniDown.exe` aus
+- Führe einfach `AniWorld-Down.exe` aus
 
 _Möglicherweise wird die Datei vom Antivirus blockiert, aber keinen Grund zur Panik! Die Datei enthält **keinen** Virus oder ähnliches. Komischerweise denkt Avast, dass sie verdächtig ist, weil das Programm in eine Datei gepackt wurde._
 
