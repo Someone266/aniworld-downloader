@@ -8,7 +8,7 @@ from yt_dlp import YoutubeDL
 import shutil
 
 
-def main():
+def dl_a_main():
     args = sys.argv #saving the cli arguments into args
 
     try:
@@ -166,6 +166,3 @@ def delpartfiles(animePath = None):
     for file in glob.iglob(os.path.join(path, '*.part')):
         # if animePath, move file to animePath
          os.remove(file)
-
-if __name__ == "__main__":
-    main()

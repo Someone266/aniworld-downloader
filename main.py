@@ -1,18 +1,21 @@
 # Aniworld Scraper
 # Author: JMcrafter26
 # Description: A scraper for aniworld (german anime site)
-# Version: 1.1
+# Version: see version variable below
 # License: MIT License
 # DISCLAIMER: This is a scraper for educational purposes only. I am not responsible for any misuse of this code.
 # Please respect the laws of your country and the country of the website you are scraping.
 
-import functions
 import sys
 import time
 
+import functions
+import gui
+import update
+
 # use auto-py-to-exe to convert this to an exe
 # VERSION
-version = "1.1.2"
+version = "1.1.3"
 
 class bcolors:
     PURPLE = '\033[95m' # #9b59b6
@@ -182,6 +185,10 @@ def showLogo():
         
 
     print("\n")
+    version = thisVersion()
+
+    if functions.isWindows():
+        version = version + " (Windows)"
 
     print(bcolors.CYAN + "    AA          W     W         ll     d     DDD                    " + bcolors.ENDC)
     print(bcolors.CYAN + "   A  A      ii W     W          l     d     D  D                   " + bcolors.ENDC)
@@ -207,7 +214,7 @@ def handleCommands():
         functions.guideUpdateFinished()
         return
 
-    functions.checkForUpdates()
+    update.checkForUpdates()
     functions.clearConsole()
     showLogo()
     print("\n")
@@ -220,7 +227,7 @@ def handleCommands():
         url = sys.argv[2]
         runMain(url)
     elif command == "ui":
-        functions.startUi()
+        gui.startUi()
   
     elif command == "search":
         runSearch()
