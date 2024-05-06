@@ -1,5 +1,5 @@
 # Aniworld Scraper
-# Author: JMcrafter26
+# Author: Someone266
 # Description: A scraper for aniworld (german anime site)
 # Version: see version variable below
 # License: MIT License
