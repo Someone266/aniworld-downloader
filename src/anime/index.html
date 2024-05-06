@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="%description%">
+    <!--Style-->
+    <link href="./assets/bootstrap.min.css" rel="stylesheet">
+    <link href="./assets/main.css" rel="stylesheet">
+</head>
+
+<body style="transition: color 500ms, background-color 500ms;">
+
+    <input type="hidden" id="animePathInput" value="">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center mt-3">Index</h1>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="searchInput" placeholder="Search anime...">
+                            <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <!-- list all animes using cards -->
+                        <div class="row" id="animeList">
+
+                            <div class="col-12 col-md-6 col-lg-4 col-xl-3" onclick="window.location.href = './anime.html?title=%title%';" data-item="placeholder">
+                                <div class="card mb-3">
+                                    <img src="./assets/placeholder.jpg" class="card-img-top placeholder" style="object-fit: cover; height: 400px;" alt="...">
+                                    <div class="card-body placeholder-glow">
+                                        <h5 class="card-title placeholder">This is an example title</h5>
+                                        <br>
+                                        <p class="card-text mb-1 placeholder">So this is a placeholder description, but limited to 100 characters because it's a placeholder.</p>
+                                        <p class="card-text"><span class="badge placeholder">Tag1</span> <span class="badge placeholder">Tag2</span></p>
+                                        <!-- episodes and seasons -->
+                                        <p class="card-text mb-0 placeholder">Seasons: 2</p>
+                                        <br>
+                                        <p class="card-text placeholder">Total Episodes: 24</p>
+                                        <div class="card-text row justify-content-between m-0">
+                                            <p class="col-auto placeholder">FINISHED</p>
+                                            <p class="col-auto placeholder">2020-2021</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4 col-xl-3" onclick="window.location.href = './anime.html?title=%title%';" data-item="placeholder">
+                                <div class="card mb-3">
+                                    <img src="./assets/placeholder.jpg" class="card-img-top placeholder" style="object-fit: cover; height: 400px;" alt="...">
+                                    <div class="card-body placeholder-glow">
+                                        <h5 class="card-title placeholder">This is an example title</h5>
+                                        <br>
+                                        <p class="card-text mb-1 placeholder">So this is a placeholder description, but limited to 100 characters because it's a placeholder.</p>
+                                        <p class="card-text"><span class="badge placeholder">Tag1</span> <span class="badge placeholder">Tag2</span></p>
+                                        <!-- episodes and seasons -->
+                                        <p class="card-text mb-0 placeholder">Seasons: 2</p>
+                                        <br>
+                                        <p class="card-text placeholder">Total Episodes: 24</p>
+                                        <div class="card-text row justify-content-between m-0">
+                                            <p class="col-auto placeholder">FINISHED</p>
+                                            <p class="col-auto placeholder">2020-2021</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4 col-xl-3" onclick="window.location.href = './anime.html?title=%title%';" data-item="placeholder">
+                                <div class="card mb-3">
+                                    <img src="./assets/placeholder.jpg" class="card-img-top placeholder" style="object-fit: cover; height: 400px;" alt="...">
+                                    <div class="card-body placeholder-glow">
+                                        <h5 class="card-title placeholder">This is an example title</h5>
+                                        <br>
+                                        <p class="card-text mb-1 placeholder">So this is a placeholder description, but limited to 100 characters because it's a placeholder.</p>
+                                        <p class="card-text"><span class="badge placeholder">Tag1</span> <span class="badge placeholder">Tag2</span></p>
+                                        <!-- episodes and seasons -->
+                                        <p class="card-text mb-0 placeholder">Seasons: 2</p>
+                                        <br>
+                                        <p class="card-text placeholder">Total Episodes: 24</p>
+                                        <div class="card-text row justify-content-between m-0">
+                                            <p class="col-auto placeholder">FINISHED</p>
+                                            <p class="col-auto placeholder">2020-2021</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                                
+
+
+        
+                <footer class="text-center mt-3">
+                    <button class="btn btn-link text-decoration-none" id="dark-light-mode-toggle">Switch theme</button>
+                    <p>Made with <span style="color: red;">&hearts;</span> by <a
+                            href="https://go.jm26.net/github">JMcrafter26</a></p>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+
+<script src="./assets/fuse.min.js"></script>
+    <script>
+
+        
+
+const theme = localStorage.getItem('theme');
+if (theme) {
+    document.documentElement.setAttribute('data-bs-theme', theme);
+} else {
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-bs-theme', 'dark');
+    } else {
+        document.documentElement.setAttribute('data-bs-theme', 'light');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    setupMainPage();
+});
+
+    document.getElementById('dark-light-mode-toggle').setAttribute('data-event-listener', 'true');
+    // add transition when theme changes
+    document.getElementById('dark-light-mode-toggle').addEventListener('click', function () {
+        var theme = document.documentElement.getAttribute('data-bs-theme');
+        if (theme == 'dark') {
+            theme = 'light';
+        } else {
+            theme = 'dark';
+        }
+        console.log('theme: ' + theme);
+        document.documentElement.setAttribute('data-bs-theme', theme);
+
+        localStorage.setItem('theme', theme);
+    });
+
+    var animeList = document.getElementById('animeList');
+        var searchButton = document.getElementById('searchButton');
+        var searchInput = document.getElementById('searchInput');
+    function setupMainPage() {
+        var index = fetchIndex();
+
+        searchButton.setAttribute('data-event-listener', 'true');
+        searchButton.addEventListener('click', function () {
+            searchAnime();
+        });
+
+        // on keyup event
+        searchInput.setAttribute('data-event-listener', 'true');
+        searchInput.addEventListener('keyup', function () {
+            searchAnime();
+        });
+
+
+        displayAnimeList(index);
+    }
+
+    function displayAnimeList(index) {
+
+        if (index.length == 0) {
+            animeList.innerHTML = '';
+            var card = document.createElement('div');
+            card.classList.add('col-12');
+            card.innerHTML = `
+                <div class="alert alert-warning" role="alert">
+                    No anime found.
+                </div>
+            `;
+            animeList.appendChild(card);
+            return;
+        }
+        console.log(index);
+
+        index.forEach(function (anime) {
+            var card = document.createElement('div');
+            card.classList.add('col-12', 'col-md-6', 'col-lg-4', 'col-xl-3');
+            card.setAttribute('onclick', 'window.location.href = "./watch.html?title=' + anime.title + '";');
+            card.setAttribute('data-item', 'true');
+            anime.description = anime.description.substring(0, 100) + '...';
+            card.innerHTML = `
+                <div class="card mb-3">
+                    <img src="./${anime.pathname}/image.jpg" class="card-img-top" style="object-fit: cover; height: 400px;" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">${anime.title}</h5>
+                        <p class="card-text mb-1">${anime.description}</p>
+                        <p class="card-text">${anime.tags.map(function (tag) {
+                return '<span class="badge bg-secondary">' + tag + '</span>';
+            }).join(' ')}</p>
+                        <p class="card-text mb-0">Seasons: ${anime.seasons}</p>
+                        <p class="card-text">Total Episodes: ${anime.totalEpisodes}</p>
+                        <div class="card-text row text-muted justify-content-between">
+                            <p class="col-auto">${anime.status}</p>
+                            <p class="col-auto">${anime.startdate}-${anime.enddate}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            // check if there is a placeholder (data-item="placeholder") and replace it with the card
+            var placeholder = animeList.querySelector('[data-item="placeholder"]');
+            if (placeholder) {
+                animeList.replaceChild(card, placeholder);
+            } else {
+                animeList.appendChild(card);
+            }
+        });
+
+        // if there are more placeholders, remove them
+        var placeholders = animeList.querySelectorAll('[data-item="placeholder"]');
+        placeholders.forEach(function (placeholder) {
+            placeholder.remove();
+        });
+    }
+
+    function searchAnime() {
+        var search = searchInput.value;
+        const index = JSON.parse(localStorage.getItem('animeIndex'));
+        if (!search || search.length == 0) {
+            displayAnimeList(index);
+            return;
+        }
+        // use fuse.js to search anime
+        var fuse = new Fuse(index, {
+            keys: ['title', 'description', 'tags']
+        });
+        var result = fuse.search(search);
+        console.log(result);
+        displayAnimeList(result.map(function (item) {
+            return item.item;
+        }));
+    }
+
+
+
+        function fetchIndex(){
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', './index.json', false);
+            xhr.send();
+            if (xhr.status != 200) {
+                console.error('Error ' + xhr.status + ': ' + xhr.statusText);
+            } else {
+                let index = JSON.parse(xhr.responseText);
+                // invert index, so the last anime is the first
+                index = index.reverse();
+                console.log(index);
+                localStorage.setItem('animeIndex', JSON.stringify(index));
+                return index;
+            }
+        }
+
+    </script>
+</body>
+</html>
