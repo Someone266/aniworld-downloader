@@ -9,7 +9,6 @@ Aniworld Down ist ein Tool, um Videos von AniWorld (ehemalig AniCloud) herunterz
 - 📂 Organisierte Oberfläche
 - 💨 Schnelles Herunteladen
 - 🔎 Suchfunktion
-- 🔄 Automatische Updates
 
 ## Installation
 
