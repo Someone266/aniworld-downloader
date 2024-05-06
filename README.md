@@ -1,3 +1,4 @@
+![Icon](https://github.com/Someone266/aniworld-downloader/raw/main/.github/project/icon.png)
 # Aniworld Down
 
 Aniworld Down ist ein Tool, um Videos von AniWorld (ehemalig AniCloud) herunterzuladen und zu organisieren.
