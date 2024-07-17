@@ -1,3 +1,4 @@
+# coding=utf-8
 import sys, os, glob
 import re
 import requests
@@ -5,11 +6,10 @@ import json
 import wget
 from bs4 import BeautifulSoup
 from yt_dlp import YoutubeDL
-import shutil
 import base64 # import base64
+import shutil
 
-
-def dl_a_main():
+def main():
     args = sys.argv #saving the cli arguments into args
 
     try:
@@ -31,7 +31,7 @@ def dl_a_main():
         download(URL)
 
 def help():
-    print("Version v1.1.0")
+    print("Version v1.2.4")
     print("")
     print("______________")
     print("Arguments:")
@@ -39,6 +39,9 @@ def help():
     print("-u <URL> downloads the <URL> you specify")
     print("-l <doc> opens the <doc> you specify and downloads every URL line after line")
     print("<URL> just the URL as Argument works the same as with -u Argument")
+    print("______________")
+    print("")
+    print("Credits to @NikOverflow, @cuitrlal and @cybersnash on GitHub for contributing")
 
 def list_dl(doc):
     curLink = 0
@@ -59,18 +62,34 @@ def download(URL, path = None, Season = None, Episode = None):
             print(f"File {path}/video/{Season}/{Episode}.mp4 already exists. Skipping...")
             return
 
-    html_page = requests.get(URL)
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+        "Accept-Language": "de,en-US;q=0.7,en;q=0.3",
+        "Upgrade-Insecure-Requests": "1",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "none",
+        "Sec-Fetch-User": "?1",
+        "Priority": "u=1"
+    }
+    html_page = requests.get(URL, headers=headers)
+
     soup = BeautifulSoup(html_page.content, 'html.parser')
+    if html_page.text.startswith("<script>"):
+        START = "window.location.href = '"
+        L = len(START)
+        i0 = html_page.text.find(START)
+        i1 = html_page.text.find("'",i0+L)
+        url = html_page.text[i0+L:i1]
+        return download(url)
 
-    name_find = soup.find("title").text
-    slice_start = name_find.index("Watch ") + 6
-    name = name_find[slice_start:]
-    slice_end = name.index(" - VOE")
-    name = name[:slice_end]
+    name_find = soup.find('meta', attrs={"name":"og:title"})
+    name = name_find["content"]
     name = name.replace(" ","_")
-    print(name)
+    print("Name of file: " + name)
 
-    # check if the file already exists
+     # check if the file already exists
     if os.path.exists(f"{name}"):
         print(f"File {name} already exists. Skipping...")
         if Season is not None and Episode is not None:
@@ -89,6 +108,7 @@ def download(URL, path = None, Season = None, Episode = None):
 
             print(f"Moved to {path}/video/{Season}/{Episode}.mp4")
         return
+
 
     sources_find = soup.find_all(string = re.compile("var sources")) #searching for the script tag containing the link to the mp4
     sources_find = str(sources_find)
@@ -110,10 +130,10 @@ def download(URL, path = None, Season = None, Episode = None):
     source_json = json.loads(source) #parsing the JSON
     try:
         link = source_json["mp4"] #extracting the link to the mp4 file
-        link = base64.b64decode(link) # idk what to do here, never found an url that uses this method
-        print(name)
+        link = base64.b64decode(link)
+        link = link.decode("utf-8")
 
-        # save url to file
+                # save url to file
         if path is None:
             animePath = False
             path = os.getcwd()
@@ -124,16 +144,13 @@ def download(URL, path = None, Season = None, Episode = None):
         with open(path + "/urls.txt", "a") as file:
             file.write(link + "\n")
         if animePath:
-            # wget verbose output, but display progress
-            wget.download(link, out=f"{path}/{name}.mp4")
-            
+            wget.download(link, out=f"{name}_SS.mp4") #downloading the file
         else:
             wget.download(link, out=f"{name}.mp4") #downloading the file
+
     except KeyError:
         try:
             link = source_json["hls"]
-
-            # added base64 decode and convert to string
             link = base64.b64decode(link)
             link = link.decode("utf-8")
 
@@ -151,7 +168,10 @@ def download(URL, path = None, Season = None, Episode = None):
 
             ydl_opts = {'outtmpl' : name,}
             with YoutubeDL(ydl_opts) as ydl:
-                ydl.download(link)
+                try:
+                    ydl.download(link)
+                except Exception as e:
+                    pass
             delpartfiles()
 
 
