@@ -15,7 +15,7 @@ import update
 
 # use auto-py-to-exe to convert this to an exe
 # VERSION
-version = "1.1.6"
+version = "1.1.7"
 
 class bcolors:
     PURPLE = '\033[95m' # #9b59b6
