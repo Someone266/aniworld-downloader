@@ -1,4 +1,5 @@
 ![Icon](https://github.com/Someone266/aniworld-downloader/raw/main/.github/project/icon.png)
+
 # Aniworld Down
 
 Aniworld Down ist ein Tool, um Videos von AniWorld (ehemalig AniCloud) herunterzuladen und zu organisieren.
@@ -26,6 +27,10 @@ soon
 
 ### Windows
 
+> Es wird empfohlen, das Windows Terminal zu verwenden, da es die Farben und Symbole korrekt anzeigt.
+> Microsoft Store: [Windows Terminal](https://apps.microsoft.com/detail/9n0dx20hk701?hl=de-de&gl=DE)
+> Exe Download: [Windows Terminal](https://github.com/microsoft/terminal/releases/latest)
+
 - Führe einfach `AniWorld-Down.exe` aus
 
 _Möglicherweise wird die Datei vom Antivirus blockiert, aber keinen Grund zur Panik! Die Datei enthält **keinen** Virus oder ähnliches. Komischerweise denkt Avast, dass sie verdächtig ist, weil das Programm in eine Datei gepackt wurde._
@@ -35,11 +40,19 @@ _Möglicherweise wird die Datei vom Antivirus blockiert, aber keinen Grund zur P
 Öffne das Terminal und ändere den Pfad zu dem Ordner, indem das Script gespeichert ist (z.B. `cd C:/users/test/Desktop/Ani-Down/`)
 
 Führe das Programm aus:
-### Windows:
+
+### Windows (cmd)
+
+> Es wird empfohlen, das Windows Terminal zu verwenden, da es die Farben und Symbole korrekt anzeigt.
+> Microsoft Store: [Windows Terminal](https://apps.microsoft.com/detail/9n0dx20hk701?hl=de-de&gl=DE)
+> Exe Download: [Windows Terminal](https://github.com/microsoft/terminal/releases/latest)
+
 ```cmd
 python main.py
 ```
+
 ### Linux und co
+
 ```bash
 python3 main.py
 ```
@@ -53,10 +66,10 @@ _Ich würde mich über einen ⭐️ und einen Follow riesig freuen 😊_
 Diese Bugs werden höhstwarscheinlich im nächsten update behoben.
 
 - Filme können nicht heruntergeladen werden
-- Folgen werden im falschen Ordner heruntergeladen
-- Programmabstürze (z.B. aufgrund von captchas)
+<!-- - Folgen werden im falschen Ordner heruntergeladen -->
+<!-- - Programmabstürze (z.B. aufgrund von captchas) -->
 - Nur voe als Hoster (streamtape api wird bald hinzugefügt)
-- Lokale Seite wird nicht richtig angezeigt
+<!-- - Lokale Seite wird nicht richtig angezeigt -->
 
 ## Disclaimer
 
