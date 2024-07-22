@@ -43,8 +43,8 @@ def getInfo(url):
     response = requests.get(url)
     html = response.text
     # DEBUG: save the html to a file
-    with open('temp.html', 'w', encoding='utf-8') as f:
-        f.write(html)
+    # with open('temp.html', 'w', encoding='utf-8') as f:
+        # f.write(html)
 
     if 'DDoS-Guard' in html:
             print(f'{main.bcolors.WARNING}DDoS-Guard detected{main.bcolors.ENDC}')
@@ -271,11 +271,16 @@ def getSeasonDownloads(url, season, episodes = None, info = None):
             data = json.load(f)
             print('Found stream.json')
             print('Checking if season already exists...')
-            if str(season) in data:
+            if "voe" in data:
                 # check if it has minimum episodes of 1
                 if len(data["voe"][str(season)]) >= 1:
                     print('Season stream urls already exist')
-                    return data              
+                    return data
+            if "streamtape" in data:
+                # check if it has minimum episodes of 1
+                if len(data["streamtape"][str(season)]) >= 1:
+                    print('Season stream urls already exist')
+                    return data         
     else:
         data = {}
 
@@ -556,8 +561,8 @@ def searchAnime(query):
     # utf decode the data
     data = data.text
     # DEBUG: save the data to a file
-    with open('search.html', 'w', encoding='utf-8') as f:
-        f.write(data)
+    # with open('search.html', 'w', encoding='utf-8') as f:
+        # f.write(data)
         
     try:
         data = json.loads(data)
@@ -769,17 +774,19 @@ def clean():
             os.remove(file)
             print('Removed:', file)
     
-    # if assets/ is empty, remove it
-    if not os.listdir('assets'):
+    # if assets folder exists, remove it
+    if os.path.exists('assets'):
         os.rmdir('assets')
         print('Removed: assets/')
     
-    # check for empty folders inside downloads/
-    folders = [f for f in os.listdir('downloads') if os.path.isdir(os.path.join('downloads', f))]
-    for folder in folders:
-        if not os.listdir(f'downloads/{folder}'):
-            os.rmdir(f'downloads/{folder}')
-            print('Removed:', f'downloads/{folder}')
+    # check if downloads folder exists
+    if os.path.exists('downloads'):
+        # check for empty folders inside downloads/
+        folders = [f for f in os.listdir('downloads') if os.path.isdir(os.path.join('downloads', f))]
+        for folder in folders:
+            if not os.listdir(f'downloads/{folder}'):
+                os.rmdir(f'downloads/{folder}')
+                print('Removed:', f'downloads/{folder}')
     
     print('Done')
     print('Press enter to continue')

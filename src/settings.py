@@ -77,4 +77,9 @@ def changeSetting(option, data):
 def getSetting(key):
     with open('settings.json', 'r') as f:
         data = json.load(f)
+    # if key is not set, create it with the default value
+    if key not in data:
+        data[key] = options[key][0]
+        with open('settings.json', 'w') as f:
+            json.dump(data, f)
     return data[key]

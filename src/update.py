@@ -51,10 +51,10 @@ def getLatestVersion():
     url = 'https://api.jm26.net/update/aniworld-down/check/'
     programVersion = main.thisVersion()
     # get assets version from assets/.version file
-    if not os.path.exists('./anime/assets/.version'):
+    if not os.path.exists('anime/assets/.version'):
         assetsVersion = '0.0.0'
     else:
-        with open('./anime/assets/.version', 'r') as f:
+        with open('anime/assets/.version', 'r') as f:
             assetsVersion = f.read()
     
     data = {
@@ -106,6 +106,11 @@ def downloadUpdate(type, hash):
 
     # remove the zip file
     os.remove(filepath)
+
+    # remove anime/assets folder if it exists to prevent overwriting
+    if os.path.exists('anime/assets'):
+        shutil.rmtree('anime/assets')
+
     # move the files and overwrite the old files
     for file in os.listdir('./update'):
         # if is a folder, move the files inside to the root folder / [folder] / [file]
