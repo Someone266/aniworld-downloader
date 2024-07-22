@@ -70,6 +70,7 @@ Diese Bugs werden höhstwarscheinlich im nächsten update behoben.
 <!-- - Programmabstürze (z.B. aufgrund von captchas) -->
 - Nur voe als Hoster (streamtape api wird bald hinzugefügt)
 <!-- - Lokale Seite wird nicht richtig angezeigt -->
+- Update-Loop: Bitte den `assets` Ordner in `anime/` entfernen
 
 ## Disclaimer
 
