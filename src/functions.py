@@ -6,13 +6,15 @@ import json
 import time
 import sys
 import bs4
-import dl_a
 import http.server
 import shutil
 import zipfile
 
 import main
 import gui
+import main
+import download
+import settings
 
 def setTitle(title = 'AniWorld Scraper'):
     # set the title of the console
@@ -23,13 +25,36 @@ def setTitle(title = 'AniWorld Scraper'):
     return
 
 
-def getInfo(url):    
+def getInfo(url):
+
+    # if url contains /filme/, write unsupported (for now)
+    if '/filme/' in url:
+        print(main.bcolors.WARNING + 'This type of url is not supported yet. It will probably be supported in the future' + main.bcolors.ENDC)
+        time.sleep(2)
+        return
+    
+    # if url has not aniworld.to in it, return
+    if 'aniworld.to' not in url:
+        print(main.bcolors.WARNING + 'Invalid url! Please enter a valid aniworld.to url' + main.bcolors.ENDC)
+        time.sleep(2)
+        return
+
     # get the html content of the page
     response = requests.get(url)
     html = response.text
+    # DEBUG: save the html to a file
+    with open('temp.html', 'w', encoding='utf-8') as f:
+        f.write(html)
+
+    if 'DDoS-Guard' in html:
+            print(f'{main.bcolors.WARNING}DDoS-Guard detected{main.bcolors.ENDC}')
+            print('Or paste your cookie key in the settings')
+            time.sleep(2)
+            return
+
     soup = bs4.BeautifulSoup(html, 'html.parser')
     # extract the title by finding the element with the class series-title and getting the inner text
-    title = soup.find('div', class_='series-title').text
+    title = soup.find('div', class_='series-title').find('h1').string
     # get the inner text of the title
     title = title.strip()
     # get the span element inside the title
@@ -38,8 +63,8 @@ def getInfo(url):
     # extract the description by finding the element with the class seri_des and data-full-description using bs4
     description = soup.find('p', class_='seri_des').get('data-full-description')
     # get the start and enddate, startdate itemprop="startDate"
-    startdate = soup.find('span', itemprop='startDate').text
-    enddate = soup.find('span', itemprop='endDate').text
+    startdate = soup.find('span', itemprop='startDate').string
+    enddate = soup.find('span', itemprop='endDate').string
 
     # if enddate is 'heute', set the status to ongoing, else set it to finished
     if enddate == 'heute':
@@ -50,9 +75,12 @@ def getInfo(url):
     # get the number of seasons
     # seasons = soup.find('meta', itemprop='numberOfSeasons').get('content') # not working
     # get the number of seasons by counting the number of li elements
-    seasons = soup.find('strong', text='Staffeln:').parent.parent.parent.find_all('li')
+    seasons = soup.find('strong', string='Staffeln:').parent.parent.parent.find_all('li')
     # check if li text is not numeric, if it is remove it
     seasons = [season.text for season in seasons]
+
+    # print(seasons)
+    # input()
     # remove all spaces from the list
     seasons = [season.replace(' ', '') for season in seasons]
     # remove all empty strings from the list
@@ -79,7 +107,7 @@ def getInfo(url):
 
     # get the tags (itemprop="genre")
     tags = soup.find_all('a', itemprop='genre')
-    tags = [tag.text for tag in tags]
+    tags = [tag.string for tag in tags]
 
     # get the producer (class="seriesProducer")
     producer = soup.find('strong', class_='seriesProducer').text
@@ -139,6 +167,7 @@ def setup(info):
 
     # the pathname is inside the current directory / anime / title (year-season)
     pathname = f'anime/{pathname}'
+    relPath = f'./{pathname}'
 
     # create the folder
     if not os.path.exists(pathname):
@@ -150,12 +179,12 @@ def setup(info):
     # get the filetype of the image
     filetype = info['picture'].split('.')[-1]
     # download the image, but first check if the image exists
-    if not os.path.exists(f'{pathname}/image.{filetype}'):
-        wget.download(info['picture'], f'{pathname}/image.{filetype}')
+    if not os.path.exists(f'{relPath}/image.{filetype}'):
+        wget.download(info['picture'], f'{relPath}/image.{filetype}')
     
     # replace picture with the image path
     info['picture'] = f'image.{filetype}'
-    info['pathname'] = pathname
+    info['pathname'] = relPath
 
     # save info
     with open(f'{pathname}/info.json', 'w') as f:
@@ -178,7 +207,7 @@ def setup(info):
         'description': info['description'],
         'totalEpisodes': info['totalEpisodes'],
         'seasons': info['seasons'],
-        'pathname': pathname,
+        'pathname': relPath,
     }
     # if it already exists, update the data
     for i, item in enumerate(data):
@@ -192,28 +221,28 @@ def setup(info):
 
 
     # get template.html and replace the placeholders with the info; e.g. %title% with the title of the anime
-    with open('./assets/template.html', 'r') as f:
-        template = f.read()
+    # with open('./assets/template.html', 'r') as f:
+    #     template = f.read()
     
-    # replace the placeholders with the info
-    template = template.replace('%title%', info['title'])
-    template = template.replace('%description%', info['description'])
-    template = template.replace('%startDate%', info['startdate'])
-    template = template.replace('%endDate%', info['enddate'])
-    template = template.replace('%status%', info['status'])
-    template = template.replace('%totalEpisodes%', str(info['totalEpisodes']))
-    template = template.replace('%seasons%', str(info['seasons']))
-    template = template.replace('%picture%', f'image.{filetype}')
-    template = template.replace('%trailer%', info['trailer'])
-    template = template.replace('%producer%', info['producer'])
-    template = template.replace('%fsk%', info['fsk'])
-    template = template.replace('%imdb%', info['imdb'])
-    template = template.replace('%tags%', ', '.join(info['tags']))
+    # # replace the placeholders with the info
+    # template = template.replace('%title%', info['title'])
+    # template = template.replace('%description%', info['description'])
+    # template = template.replace('%startDate%', info['startdate'])
+    # template = template.replace('%endDate%', info['enddate'])
+    # template = template.replace('%status%', info['status'])
+    # template = template.replace('%totalEpisodes%', str(info['totalEpisodes']))
+    # template = template.replace('%seasons%', str(info['seasons']))
+    # template = template.replace('%picture%', f'image.{filetype}')
+    # template = template.replace('%trailer%', info['trailer'])
+    # template = template.replace('%producer%', info['producer'])
+    # template = template.replace('%fsk%', info['fsk'])
+    # template = template.replace('%imdb%', info['imdb'])
+    # template = template.replace('%tags%', ', '.join(info['tags']))
 
-    # create the info.html file, but first utf-8 encode the data
-    template = template.encode('utf-8')
-    with open(f'{pathname}/info.html', 'wb') as f:
-        f.write(template)
+    # # create the info.html file, but first utf-8 encode the data
+    # template = template.encode('utf-8')
+    # with open(f'{pathname}/info.html', 'wb') as f:
+    #     f.write(template)
     print('Anime folder setup complete')
     return
 
@@ -224,13 +253,31 @@ def getSeasonDownloads(url, season, episodes = None, info = None):
         html = response.text
         soup = bs4.BeautifulSoup(html, 'html.parser')
         # get the ul where Episoden is in the span
-        episodes = soup.find('strong', text='Episoden:').parent.parent.parent
+        episodes = soup.find('strong', string='Episoden:').parent.parent.parent
         # get the number of episodes by counting the number of li elements
         episodes = episodes.find_all('li')
         # get the number of episodes by counting the number of li elements
         episodes = len(episodes) - 1
     
     print(f'Getting streams for season {season} with {episodes} episodes...')
+
+    path = f'{info["title"]} ({info["startdate"]}-{info["enddate"]})'
+    path = re.sub(r'[<>:"/\\|?*]', '', path)
+    print('Path:', path)
+
+    # check if season already exists in the json file
+    if os.path.exists('anime/' + path + '/stream.json'):
+        with open('anime/' + path + '/stream.json', 'r') as f:
+            data = json.load(f)
+            print('Found stream.json')
+            print('Checking if season already exists...')
+            if str(season) in data:
+                # check if it has minimum episodes of 1
+                if len(data["voe"][str(season)]) >= 1:
+                    print('Season stream urls already exist')
+                    return data              
+    else:
+        data = {}
 
     # foreach episode, get the download links
     data = {}
@@ -259,24 +306,14 @@ def getEpisodeDownloads(url, season, episode, info = None):
     # get the html content of the page
     response = requests.get(url)
     html = response.text
-    soup = bs4.BeautifulSoup(html, 'html.parser')
 
-    # get the parent of i element class="icon VOE"
-    download = soup.find('i', class_='icon VOE')
-    # if the download element is not found, return
-    if download is None:
-        print('No voe download found, skipping...')
+    if 'DDoS-Guard' in html:
+        print(f'{main.bcolors.WARNING}DDoS-Guard detected{main.bcolors.ENDC}')
+        print('Or paste your cookie key in the settings')
+        time.sleep(2)
         return
-    # get the parent of the i element
-    download = download.parent
-    # get the href of the a element
-    download = download.get('href')
-    download = 'https://aniworld.to' + download
-    streamUrl = redirectUrl(download)
-    if streamUrl is None:
-        print('No stream url found')
-        return
-    
+
+    soup = bs4.BeautifulSoup(html, 'html.parser')
     # save link to json file
     if info is not None:
         pathname = f'{info["title"]} ({info["startdate"]}-{info["enddate"]})'
@@ -287,26 +324,84 @@ def getEpisodeDownloads(url, season, episode, info = None):
     else:
         pathname = f'stream.json'
 
+    # get the parent of i element class="icon VOE"
+    voeDownloadLink = soup.find('i', class_='icon VOE')
+    # if the download element is not found, return
+    if voeDownloadLink is None:
+        print('No voe download found, skipping...')
+        return
+    # get the parent of the i element
+    voeDownloadLink = voeDownloadLink.parent
+    # get the href of the a element
+    voeDownloadLink = voeDownloadLink.get('href')
+    voeDownloadLink = 'https://aniworld.to' + voeDownloadLink
+    streamUrl = redirectUrl(voeDownloadLink)
+    if streamUrl is None:
+        print('No stream url found')
+        return
+    
+    
+
     # add the stream url inside the season array
     # e.g.
     # {
-    #    "1": {
-    #        "1": "https://voe.sx/e/1234567890",
-    #        "2": "https://voe.sx/e/1234567891",
-    #    }
+    #   "voe": {
+    #        "1": {
+    #            "1": "https://voe.sx/e/1234567890",
+    #           "2": "https://voe.sx/e/1234567891",
+    #       }  
+    #   }
     # }
     if os.path.exists(pathname):
         with open(pathname, 'r') as f:
             data = json.load(f)
     else:
         data = {}
-    if str(season) not in data:
-        data[str(season)] = {}
-    data[str(season)][str(episode)] = streamUrl
+    if str("voe") not in data:
+        data["voe"] = {}
+    if str(season) not in data["voe"]:
+        data["voe"][str(season)] = {}
+    data["voe"][str(season)][str(episode)] = streamUrl
+    
     with open(pathname, 'w') as f:
         json.dump(data, f, indent=4)
     
-    return streamUrl
+    # get streamtape download link
+    streamtapeDownloadLink = soup.find('i', class_='icon Streamtape')
+    # if the download element is not found, return
+    if streamtapeDownloadLink is None:
+        print('No streamtape download found, skipping...')
+        return
+    # get the parent of the i element
+    streamtapeDownloadLink = streamtapeDownloadLink.parent
+    # get the href of the a element
+    streamtapeDownloadLink = streamtapeDownloadLink.get('href')
+    streamtapeDownloadLink = 'https://aniworld.to' + streamtapeDownloadLink
+    streamUrl = redirectUrl(streamtapeDownloadLink)
+    if streamUrl is None:
+        print('No stream url found')
+        return
+    
+
+    # add the stream url inside the season array
+    if os.path.exists(pathname):
+        with open(pathname, 'r') as f:
+            data = json.load(f)
+    else:
+        data = {}
+    if str("streamtape") not in data:
+        data["streamtape"] = {}
+    if str(season) not in data["streamtape"]:
+        data["streamtape"][str(season)] = {}
+    data["streamtape"][str(season)][str(episode)] = streamUrl
+
+    with open(pathname, 'w') as f:
+        json.dump(data, f, indent=4)
+    
+    if data["voe"][str(season)][str(episode)] is not None:
+        return data["voe"][str(season)][str(episode)]
+    else:
+        return streamUrl
 
 def redirectUrl(url):
     # get header of the url, if it starts with 3, it's a redirect, if not return the url
@@ -341,7 +436,7 @@ def getEpisodesFromSeason(url, season):
 
     # get the episodes of the season
     # get the ul where Episoden is in the span
-    episodes = soup.find('strong', text='Episoden:').parent.parent.parent
+    episodes = soup.find('strong', string='Episoden:').parent.parent.parent
     # get the number of episodes by counting the number of li elements
     episodes = episodes.find_all('li')
     episodes = len(episodes) - 1
@@ -361,9 +456,9 @@ def downloadEpisode(season, episode, info = None):
             data = json.load(f)
     print(f'Downloading season {season} episode {episode}...')
     # get the stream url from the json file
-    streamUrl = data[str(season)][str(episode)]
-    print(streamUrl)
-    dl_a.download(streamUrl, pathname, season, episode)
+    # streamUrl = data[str(season)][str(episode)]
+    # print(streamUrl)
+    download.main(pathname, season, episode)
 
 def downloadSeason(season, info = None):
     if info is None:
@@ -376,14 +471,14 @@ def downloadSeason(season, info = None):
         with open(pathname + '/stream.json', 'r') as f:
             data = json.load(f)
     # get the stream url from the json file
-    for episode in data[str(season)]:
-        streamUrl = data[str(season)][episode]
+    for episode in data["voe"][str(season)]:
+        # streamUrl = data[str(season)][episode]
         clearConsole()
         main.showLogo()
         print(f'Downloading season {season} episode {episode}...')
-        updateProgress(int(episode) / len(data[str(season)]))
+        updateProgress(int(episode) / len(data["voe"][str(season)]))
         print("\n")
-        dl_a.download(streamUrl, pathname, season, episode)
+        download.main(pathname, season, episode)
 
 def downloadRange(season, start, end, info = None):
     if info is None:
@@ -397,13 +492,13 @@ def downloadRange(season, start, end, info = None):
             data = json.load(f)
     # get the stream url from the json file
     for episode in range(start, end + 1):
-        streamUrl = data[str(season)][str(episode)]
+        # streamUrl = data[str(season)][str(episode)]
         clearConsole()
         main.showLogo()
         print(f'Downloading season {season} episode {episode}...')
         updateProgress((episode - start) / (end - start))
         print("\n")
-        dl_a.download(streamUrl, pathname, season, episode)
+        download.main(pathname, season, episode)
     
     return
 
@@ -412,8 +507,9 @@ def searchAnime(query):
     # query = 'Solo Leveling'
     # query = '+'.join(query.split(' '))
 
-    if query == '':
+    if query == '' or query == None:
         print(main.bcolors.WARNING + 'No query entered' + main.bcolors.ENDC)
+        time.sleep(2)
         return
     
     
@@ -459,11 +555,23 @@ def searchAnime(query):
     
     # utf decode the data
     data = data.text
-    # print(data)
-    # parse the json data
-    data = json.loads(data)
-    # print(data)
-
+    # DEBUG: save the data to a file
+    with open('search.html', 'w', encoding='utf-8') as f:
+        f.write(data)
+        
+    try:
+        data = json.loads(data)
+    except:
+        # if data contains DDoS-Guard
+        if 'DDoS-Guard' in data:
+            print(f'{main.bcolors.WARNING}DDoS-Guard detected{main.bcolors.ENDC}')
+            print('Or paste your cookie key in the settings')
+            time.sleep(2)
+            return
+        print(f'{main.bcolors.WARNING}Error parsing JSON{main.bcolors.ENDC}')
+        print('Try again later')
+        time.sleep(2)
+        return
 
     
     return searchAnime1(query, data)
@@ -501,8 +609,8 @@ def searchAnime1(query, data):
 
     
     # debug, save the data to a file
-    with open('search.txt', 'w') as f:
-        json.dump(data, f, indent=4)
+    # with open('search.txt', 'w') as f:
+        # json.dump(data, f, indent=4)
     
     clearConsole()
     main.showLogo()
@@ -544,7 +652,7 @@ def serveContent():
     # start a http server with document root to the anime folder
     PORT = 3333
     Handler = http.server.SimpleHTTPRequestHandler
-    web_dir = os.path.join(os.path.dirname(__file__), 'anime')
+    web_dir = os.path.join(os.getcwd(), 'anime')
     os.chdir(web_dir)
     with http.server.HTTPServer(("", PORT), Handler) as httpd:
         print("serving at http://localhost:" + str(PORT) + "/")
@@ -559,7 +667,9 @@ def clean():
     main.showLogo()
     print('Running cleanup...')
 
-    files = [f for f in os.listdir('.') if f.endswith('.part') or f.endswith('.ytdl')]
+    # get files in ./downloads/ and its subdirs that end with .part
+    files = [os.path.join(root, f) for root, dirs, files in os.walk('./downloads') for f in files if f.endswith('.part') or f.endswith('.ytdl')]
+
     # if there are no files, return
     if files:
         print(main.bcolors.WARNING + 'Do you want to delete non finished downloads? After deleting you have to restart the download' + main.bcolors.ENDC)
@@ -587,6 +697,10 @@ def clean():
         if not os.path.exists(f'anime/{folder}/info.json'):
             # os.rmdir(f'anime/{folder}')
             continue
+        # remove stream.json
+        if os.path.exists(f'anime/{folder}/stream.json'):
+            os.remove(f'anime/{folder}/stream.json')
+        
         with open(f'anime/{folder}/info.json', 'r') as f:
             info = json.load(f)
         # if info.json does not contain the an item, run setup -u <url>
@@ -645,8 +759,9 @@ def clean():
         'assets/animeList.json',
         'assets/placeholder.jpg',
         'assets/fuse.min.js',
-        'functions.py',
-        'dl_a.py'
+        'assets/.version',
+        # 'functions.py',
+        # 'voe.py'
     ]
     print('Removing unused files...')
     for file in removeFiles:
@@ -654,8 +769,25 @@ def clean():
             os.remove(file)
             print('Removed:', file)
     
+    # if assets/ is empty, remove it
+    if not os.listdir('assets'):
+        os.rmdir('assets')
+        print('Removed: assets/')
+    
+    # check for empty folders inside downloads/
+    folders = [f for f in os.listdir('downloads') if os.path.isdir(os.path.join('downloads', f))]
+    for folder in folders:
+        if not os.listdir(f'downloads/{folder}'):
+            os.rmdir(f'downloads/{folder}')
+            print('Removed:', f'downloads/{folder}')
+    
     print('Done')
+    print('Press enter to continue')
+    # return to main menu
+    input()
+    gui.startUi()
     return
+
 
 
 def validateUrl(url):
@@ -686,8 +818,8 @@ def firstRun():
         if not os.path.exists('./anime'):
             os.makedirs('./anime')
         # check if the assets folder exists, if not create it
-        if not os.path.exists('./assets'):
-            os.makedirs('./assets')
+        # if not os.path.exists('./assets'):
+            # os.makedirs('./assets')
 
     
         
@@ -716,7 +848,9 @@ def guideUpdateFinished():
     input()
     gui.guide3()
 
-
+def showSettings():
+    settings.menu()
+    return
 
 def isWindows():
     # IS WINDOWS

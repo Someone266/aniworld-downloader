@@ -1,5 +1,5 @@
 # Aniworld Scraper
-# Author: Someone266
+# Author: JMcrafter26
 # Description: A scraper for aniworld (german anime site)
 # Version: see version variable below
 # License: MIT License
@@ -15,7 +15,7 @@ import update
 
 # use auto-py-to-exe to convert this to an exe
 # VERSION
-version = "1.1.4"
+version = "1.1.6"
 
 class bcolors:
     PURPLE = '\033[95m' # #9b59b6
@@ -55,20 +55,17 @@ def runAuto():
     functions.updateAnimeList()
     print(bcolors.OK + "This is the auto mode. It will ask you what to download." + bcolors.ENDC)
     print("\n")
-    print("Do you want to search for an anime or enter the url directly? (S/u)")
+    print("Enter the name of the anime you want to search for or paste the url of the anime")
     choice = input()
-    if choice == 'S' or choice == 's':
-        functions.clearConsole()
-        showLogo()
-        print("Enter the name of the anime you want to search for")
-        name = input()
-        url = functions.searchAnime(name)
-
+    if choice.startswith("http"):
+        print(url)
+    elif choice != "" and choice != None:
+        url = functions.searchAnime(choice)
     else:
-        url = input("Enter the url of the anime: ")
-    # validate the url
-    print(url)
-
+        print("Invalid input")
+        time.sleep(2)
+        runAuto()
+        return
         
     
     info = functions.getInfo(url)
@@ -87,11 +84,7 @@ def runAuto1(url, info):
     print("\n")
     print('Do you want to download all episodes? (Y/n)')
     downloadAll = input()
-    if downloadAll == 'Y' or downloadAll == 'y' or downloadAll == 'yes' or downloadAll == 'Yes':
-        print(bcolors.OK + "Downloading all episodes" + bcolors.ENDC)
-        for season in range(1, info['seasons'] + 1):
-            functions.downloadSeason(season, info)
-    else:
+    if downloadAll != 'Y' and downloadAll != 'y' and downloadAll != 'yes' and downloadAll != 'Yes' and downloadAll != '':
         print("Which season do you want to download?")
         season = int(input())
         print("What episode do you want to download? (Enter 0 to download all episodes; use - to download a range of episodes)")
@@ -121,9 +114,18 @@ def runAuto1(url, info):
                 runAuto1(url, info)
                 return
             functions.downloadEpisode(season, episode, info)
-    print(bcolors.OK + "Script finished! Press any key to exit" + bcolors.ENDC)
+    else:
+        print(bcolors.OK + "Downloading all episodes" + bcolors.ENDC)
+        for season in range(1, info['seasons'] + 1):
+            functions.downloadSeason(season, info)
+
+    
+    print(bcolors.OK + "Download complete" + bcolors.ENDC)
+    print("\n")
+    print(bcolors.PRIMARY + "Press enter to return to the main menu" + bcolors.ENDC)
     input()
-    return
+    # return to the main menu
+    gui.startUi()
 
 def thisVersion():
     return version

@@ -38,9 +38,10 @@ def checkForUpdates():
 
 def getLatestVersion():
     print('Checking for updates...', end='')
-    # check if an internet connection is available
+    # check if an endpoint is reachable
     try:
-        requests.get('https://api.jm26.net/status.txt')
+        # if https://api.jm26.net/status.txt status is 200, continue (5 seconds timeout)
+        requests.get('https://api.jm26.net/status.txt', timeout=5)
     except requests.exceptions.ConnectionError:
         print(' Skipped')
         print(main.bcolors.WARNING + 'No internet connection' + main.bcolors.ENDC)
@@ -50,11 +51,12 @@ def getLatestVersion():
     url = 'https://api.jm26.net/update/aniworld-down/check/'
     programVersion = main.thisVersion()
     # get assets version from assets/.version file
-    if not os.path.exists('./assets/.version'):
-        with open('./assets/.version', 'w') as f:
-            f.write('0.0.0')
-    with open('./assets/.version', 'r') as f:
-        assetsVersion = f.read()
+    if not os.path.exists('./anime/assets/.version'):
+        assetsVersion = '0.0.0'
+    else:
+        with open('./anime/assets/.version', 'r') as f:
+            assetsVersion = f.read()
+    
     data = {
         'program': programVersion,
         'assets': assetsVersion,
@@ -126,6 +128,10 @@ def downloadUpdate(type, hash):
     os.rmdir('./update')
 
     print(main.bcolors.OK + 'Update complete' + main.bcolors.ENDC)
+    print('\n')
+    # recommend the clean function
+    print(f'{main.bcolors.WARNING}It is recommended to run the {main.bcolors.ENDC}{main.bcolors.OK}clean option{main.bcolors.ENDC}{main.bcolors.WARNING} after updating{main.bcolors.ENDC}')
+    print('\n')
 
 
     # if type is program, restart the program

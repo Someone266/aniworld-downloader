@@ -12,19 +12,19 @@ def startUi():
     print('Press one of the following keys:')
     # userselect with navigation
     print('1. Download Assistant')
-    print('2. Manual Download')
-    print('3. Continue Download')
-    print('4. Serve content')
-    print('5. Clean up')
-    print('6. Setup anime folder')
-    print('7. Get anime info')
+    print('2. Continue Download')
+    print('3. Serve content')
+    print('4. Clean up')
+    print('5. Open anime folder')
+    print('6. Get anime info')
     print('0. Settings')
+    print('h. Help/Info')
     print('q. Quit')
 
     # get the key from the user
     key = input()
     # if the key is not in the list, return
-    if key not in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'q', 'Q']:
+    if key not in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'q', 'Q', 'h', 'i']:
         print('Invalid key')
         startUi()
         return
@@ -32,7 +32,7 @@ def startUi():
     if key == '1':
         main.runAuto()
     # if the key is 2, run the manual anime download
-    elif key == '2':
+    elif key == 'x':
         print('This mode will download everything from the given url')
         print('Enter the url of the anime')
         url = input()
@@ -43,17 +43,44 @@ def startUi():
             startUi()
             return
         main.runMain(url)
-    elif key == '3':
+    elif key == '2':
         print('Not implemented yet')
         time.sleep(2)
         startUi()
     # if the key is 3, run the serve content
-    elif key == '4':
+    elif key == '3':
         functions.serveContent()
     # if the key is 4, run the clean up
-    elif key == '5':
+    elif key == '4':
         functions.clean()
     # if the key is 5, run the setup anime folder
+    elif key == '5':
+        # print('Enter the url of the anime')
+        # url = input()
+        # url = functions.validateUrl(url)
+        # if not url:
+        #     print(main.bcolors.WARNING + 'Invalid url' + main.bcolors.ENDC)
+        #     time.sleep(2)
+        #     startUi()
+        #     return
+        # info = functions.getInfo(url)
+        # functions.setup(info)
+
+        # open anime folder, based on the os and the available file explorer
+        if os.name == 'nt':
+            os.system('start .\\anime')
+        elif os.name == 'posix':
+            os.system('xdg-open .\\anime')
+        else:
+            print('Unsupported os')
+            print('The anime folder is located in the following directory:')
+            # get the current script directory
+            print(os.getcwd() + '\\anime')
+            print('\nPress enter to continue')
+            input()
+            startUi()
+        startUi()
+
     elif key == '6':
         print('Enter the url of the anime')
         url = input()
@@ -63,20 +90,28 @@ def startUi():
             time.sleep(2)
             startUi()
             return
-        info = functions.getInfo(url)
-        functions.setup(info)
-    # if the key is 6, run the get anime info
-    elif key == '7':
-        print('Enter the url of the anime')
-        url = input()
-        url = functions.validateUrl(url)
-        if not url:
-            print(main.bcolors.WARNING + 'Invalid url' + main.bcolors.ENDC)
-            time.sleep(2)
-            startUi()
-            return
         print(functions.getInfo(url))
-    # if the key is 7, run the get season streams
+    elif key == '0':
+        functions.showSettings()
+        startUi()
+    elif key == 'h' or key == 'i':
+        functions.clearConsole()
+        main.showLogo()
+        print(main.bcolors.PRIMARY + 'Info' + main.bcolors.ENDC)
+        print('\n')
+        print(f'{main.bcolors.OK}This program was made by JMcrafter26 and published by Someone266 on Github{main.bcolors.ENDC}')
+        print(f'{main.bcolors.OK}The program is open source and can be found here: https://github.com/Someone266/aniworld-downloader/{main.bcolors.ENDC}')
+        print('\n')
+        print('This program is still in development, so there might be some bugs')
+        print('If you find a bug, please report it on the Github page')
+        print('\n')
+        # the developer nor the publisher is responsible for any damage caused by the program
+        print(f'{main.bcolors.OK}This program is for educational purposes only, the developer nor the publisher is responsible for any damage caused by the program. This program is not affiliated with any of the anime sites. This program is provided as is, without any warranty. Use at your own risk.{main.bcolors.ENDC}')
+        print('\n')
+        print('Press enter to continue')
+        input()
+        showInstructions()
+        
     elif key == 'q' or key == 'Q':
         print('Quitting...')
         exit()
@@ -202,6 +237,25 @@ def guide4a():
         print('Invalid option, try again')
         guide4a()
         return
+    guide4b()
+
+def guide4b():
+    functions.clearConsole()
+    main.showLogo()
+    print(main.bcolors.PRIMARY + 'Select your preferred host' + main.bcolors.ENDC)
+    print('1. Voe (Recommended)')
+    print('2. Streamtape')
+    print('\n')
+    print(main.bcolors.SECONDARY + 'Choose an option by pressing the number' + main.bcolors.ENDC)
+    option = input()
+    if option == '1':
+        functions.saveSetting('prefHost', 'voe')
+    elif option == '2':
+        functions.saveSetting('prefHost', 'streamtape')
+    else:
+        print('Invalid option, try again')
+        guide4b()
+        return
     guide5()
 
 def guide5():
@@ -214,6 +268,8 @@ def guide5():
     print('Press enter to just freakin start the program')
     key = input()
     if key == 'i':
+
+
         showInstructions()
     startUi()
     return
@@ -226,20 +282,20 @@ def showInstructions():
     print(main.bcolors.PRIMARY + 'Instructions' + main.bcolors.ENDC)
     print('1. Download Assistant')
     print('This option will guide you through the download process, you just need to enter the url of the anime')
-    print('2. Manual Download')
-    print('This option will download everything from the given url')
-    print('3. Continue Download')
-    print('This option will continue the download from the last download')
-    print('4. Serve content')
-    print('This option will start a http server with document root to the anime folder')
-    print('5. Clean up')
-    print('This option will delete non finished downloads, after deleting you can\'t resume the download')
-    print('6. Setup anime folder')
-    print('This option will setup the anime folder with the given url')
-    print('7. Get anime info')
-    print('This option will get the anime info from the given url')
+    print('2. Continue Download')
+    print('This option is not implemented yet')
+    print('3. Serve content')
+    print('This option will start a webserver to serve the content - you can watch the anime in your browser (even offline and other devices)')
+    print('4. Clean up')
+    print('This option will clean up the program and the assets')
+    print('5. Open anime folder')
+    print('This option will open the anime folder where the anime is stored')
+    print('6. Get anime info')
+    print('This option will get the info of the anime from the url')
     print('0. Settings')
-    print('This option will show the settings')
+    print('This option will allow you to change the settings of the program')
+    print('h. Help/Info')
+    print('This is the current screen :)')
     print('q. Quit')
     print('\n')
     print('Press enter to continue')
