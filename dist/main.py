@@ -9,50 +9,50 @@
 # This code was minified to save space. If you want to read the code, please read the original files.
 
 
-Bf='Download complete'
-Be='No internet connection'
-Bd='Invalid option, try again'
-Bc='download'
-Bb='archive'
-Ba='Choose an option by pressing the number'
-BZ='There is a program update available'
-BY='Downloading assets...'
-BX='You are up to date'
-BW='success'
-BV='message'
-BU='Something went wrong with the update check'
-BT='q. Quit'
-BS='h. Help/Info'
-BR='0. Settings'
-BQ='6. Get anime info'
-BP='5. Open anime folder'
-BO='4. Clean up'
-BN='3. Serve content'
-BM='2. Continue Download'
-BL='1. Download Assistant'
-BK='Checking for updates...'
-BJ='Episoden:'
-BI='producer'
-BH='trailer'
-BG='animeSeason'
-BF='This type of url is not supported yet. It may be supported in the future'
-BE='anime/stream'
-BD='Invalid url! Please enter a valid aniworld.to url'
-BC='content'
-BB='og:title'
-BA='navigate'
-B9='document'
-B8='de,en-US;q=0.7,en;q=0.3'
-B7='Priority'
-B6='Sec-Fetch-User'
-B5='Sec-Fetch-Site'
-B4='Sec-Fetch-Mode'
-B3='Sec-Fetch-Dest'
-B2='Upgrade-Insecure-Requests'
-B1='Accept-Language'
-B0='User-Agent'
-A_='outtmpl'
-Az=KeyError
+Bg='Download complete'
+Bf='No internet connection'
+Be='Invalid option, try again'
+Bd='download'
+Bc='archive'
+Bb='Choose an option by pressing the number'
+Ba='There is a program update available'
+BZ='Downloading assets...'
+BY='You are up to date'
+BX='success'
+BW='message'
+BV='Something went wrong with the update check'
+BU='q. Quit'
+BT='h. Help/Info'
+BS='0. Settings'
+BR='6. Get anime info'
+BQ='5. Open anime folder'
+BP='4. Clean up'
+BO='3. Serve content'
+BN='2. Continue Download'
+BM='1. Download Assistant'
+BL='Checking for updates...'
+BK='Episoden:'
+BJ='producer'
+BI='trailer'
+BH='animeSeason'
+BG='This type of url is not supported yet. It may be supported in the future'
+BF='anime/stream'
+BE='Invalid url! Please enter a valid aniworld.to url'
+BD='content'
+BC='og:title'
+BB='navigate'
+BA='document'
+B9='de,en-US;q=0.7,en;q=0.3'
+B8='Priority'
+B7='Sec-Fetch-User'
+B6='Sec-Fetch-Site'
+B5='Sec-Fetch-Mode'
+B4='Sec-Fetch-Dest'
+B3='Upgrade-Insecure-Requests'
+B2='Accept-Language'
+B1='User-Agent'
+B0='outtmpl'
+A_=KeyError
 Ak='option'
 Aj='Error:'
 Ai='Invalid url'
@@ -88,9 +88,9 @@ x=exit
 v='pathname'
 u='[<>:"/\\\\|?*]'
 t='tags'
-s='prefHost'
-r='html.parser'
-q='1'
+s='html.parser'
+r='1'
+q='prefHost'
 p=range
 l='totalEpisodes'
 k='description'
@@ -119,55 +119,15 @@ G=input
 F=None
 E=open
 A=print
-import requests as R,bs4 as w,js2py,re as g
-from yt_dlp import YoutubeDL as Al
-def Am(url,retry=AZ):
-	try:E,C=Bg(url)
-	except AX as D:
-		A(D)
-		if not retry:A(B.WARNING+'Error getting direct url, retrying...'+B.ENDC);return Am(url,True)
-		else:A(B.FAIL+'Failed to get direct url! Try again later or switch to another hoster.'+B.ENDC);return
-	C=C.replace('"',J);C=C.replace(j,'_');C=C.replace(I,J);C=C.replace('\r',J);F={A_:C}
-	with Al(F)as G:
-		try:G.download(E)
-		except AX as D:pass;Ao()
-	return C
-def Bg(url):
-	D='id=';H={B0:'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',B1:B8,B2:q,B3:B9,B4:BA,B5:'none',B6:'?1',B7:'u=1'};K=R.get(url,headers=H);C=J;E=w.BeautifulSoup(K.content,r);L=E.find('meta',attrs={'name':BB})[BC];M=E.find(AA,id='robotlink').find_next('script');B=M.text;B=B.split(I);F=[]
-	for G in B:
-		if G.startswith("document.getElementById('ide"):F.append(G)
-	B=F[-1];B=B.split('document.getElementById')[1];B=B.split('innerHTML = ')[1];B=B.rstrip(';');B=js2py.eval_js(B);B=B.split('?')[1]
-	if not B.startswith(D):B=D+g.sub('^.*?=',J,B)
-	C='https://streamtape.com/get_video?'+B;A(C);return C,L
-import sys as P,os as C,glob,json as D,wget as AK
-from bs4 import BeautifulSoup as Bh
-import base64 as An
-def Bi(URL):
-	L='var sources';K=URL;K=H(K);S={B0:'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0','Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',B1:B8,B2:q,B3:B9,B4:BA,B5:'none',B6:'?1',B7:'u=1'};F=R.get(K,headers=S);M=Bh(F.content,r)
-	if F.text.startswith('<script>'):N="window.location.href = '";O=V(N);P=F.text.find(N);T=F.text.find("'",P+O);U=F.text[P+O:T];return download(U)
-	W=M.find('meta',attrs={'name':BB});E=W[BC];E=E.replace(j,'_');A('Name of file: '+E);G=M.find_all(string=g.compile(L));G=H(G);X=G.index(L);B=G[X:];Y=B.index(';');B=B[:Y];B=B.replace('var sources = ',J);B=B.replace("'",'"');B=B.replace('\\n',J);B=B.replace('\\',J);Z=',';a=J;B=a.join(B.rsplit(Z,1));Q=D.loads(B)
-	try:C=Q['mp4'];C=An.b64decode(C);C=C.decode(Aa);AK.download(C,out=f"{E}_SS.mp4")
-	except Az:
-		try:
-			C=Q['hls'];C=An.b64decode(C);C=C.decode(Aa);E=E+'_SS.mp4';b={A_:E}
-			with Al(b)as c:
-				try:c.download(C)
-				except AX as d:pass
-			Ao()
-		except Az:A('Could not find downloadable URL. Voe might have change their site. Check that you are running the latest version of voe-dl, and if so file an issue on GitHub.');quit()
-	A(I);return E
-def Ao():
-	A=C.getcwd()
-	for B in glob.iglob(C.path.join(A,'*.part')):C.remove(B)
-import os as C,shutil as m,time as K
-def AL(path,season,episode):
+import os as C,shutil as m,time as K,json as D
+def AK(path,season,episode):
 	U='/downloads';R='downloads.json';J=path;I=episode;G=season
 	if J is not F and G is not F and I is not F:
 		if C.path.exists(f"{J}/video/{G}/{I}.mp4"):A(f"{B.WARNING}File {J}/video/{G}/{I}.mp4 already exists. Skipping...{B.ENDC}");return
 	if not C.path.exists(C.getcwd()+U):C.makedirs(C.getcwd()+U)
 	L=J.split(y)[1]
 	if not C.path.exists(f"downloads/{L}"):C.makedirs(f"downloads/{L}")
-	V=Bt(s)
+	V=Bt(q)
 	with E(f"{J}/stream.json",O)as M:W=D.load(M)
 	C.chdir(f"downloads/")
 	if not C.path.exists(R):
@@ -177,11 +137,51 @@ def AL(path,season,episode):
 	else:N.setdefault(L,{}).setdefault(G,{})[I]='downloading'
 	with E(R,T)as M:D.dump(N,M)
 	C.chdir(f"{L}")
-	if V==Q:S=W[Q][H(G)][H(I)];P=Bi(S)
+	if V==Q:S=W[Q][H(G)][H(I)];P=Ao(S)
 	elif V==Z:S=W[Z][H(G)][H(I)];P=Am(S)
 	else:A('Invalid host');K.sleep(2);return
 	if P is F:A(f"{B.FAIL}Download failed{B.ENDC}");K.sleep(2);return
 	C.chdir('../../');C.makedirs(f"{J}/video/{G}",exist_ok=True);P=f"downloads/{L}/{P}";m.move(f"{P}",f"{J}/video/{G}/{I}.mp4");A(f"Moved to {J}/video/{G}/{I}.mp4")
+import requests as R,bs4 as w,js2py,re as g
+from yt_dlp import YoutubeDL as Al
+def Am(url,retry=AZ):
+	try:E,C=Bh(url)
+	except AX as D:
+		A(D)
+		if not retry:A(B.WARNING+'Error getting direct url, retrying...'+B.ENDC);return Am(url,True)
+		else:A(B.FAIL+'Failed to get direct url! Try again later or switch to another hoster.'+B.ENDC);return
+	C=C.replace('"',J);C=C.replace(j,'_');C=C.replace(I,J);C=C.replace('\r',J);F={B0:C}
+	with Al(F)as G:
+		try:G.download(E)
+		except AX as D:pass;Ap()
+	return C
+def Bh(url):
+	D='id=';H={B1:'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',B2:B9,B3:r,B4:BA,B5:BB,B6:'none',B7:'?1',B8:'u=1'};K=R.get(url,headers=H);C=J;E=w.BeautifulSoup(K.content,s);L=E.find('meta',attrs={'name':BC})[BD];M=E.find(AA,id='robotlink').find_next('script');B=M.text;B=B.split(I);F=[]
+	for G in B:
+		if G.startswith("document.getElementById('ide"):F.append(G)
+	B=F[-1];B=B.split('document.getElementById')[1];B=B.split('innerHTML = ')[1];B=B.rstrip(';');B=js2py.eval_js(B);B=B.split('?')[1]
+	if not B.startswith(D):B=D+g.sub('^.*?=',J,B)
+	C='https://streamtape.com/get_video?'+B;A(C);return C,L
+import sys as P,os as C,glob,wget as AL
+from bs4 import BeautifulSoup as Bi
+import base64 as An
+def Ao(URL):
+	L='var sources';K=URL;K=H(K);S={B1:'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0','Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',B2:B9,B3:r,B4:BA,B5:BB,B6:'none',B7:'?1',B8:'u=1'};F=R.get(K,headers=S);M=Bi(F.content,s)
+	if F.text.startswith('<script>'):N="window.location.href = '";O=V(N);P=F.text.find(N);T=F.text.find("'",P+O);U=F.text[P+O:T];return Ao(U)
+	W=M.find('meta',attrs={'name':BC});E=W[BD];E=E.replace(j,'_');A('Name of file: '+E);G=M.find_all(string=g.compile(L));G=H(G);X=G.index(L);B=G[X:];Y=B.index(';');B=B[:Y];B=B.replace('var sources = ',J);B=B.replace("'",'"');B=B.replace('\\n',J);B=B.replace('\\',J);Z=',';a=J;B=a.join(B.rsplit(Z,1));Q=D.loads(B)
+	try:C=Q['mp4'];C=An.b64decode(C);C=C.decode(Aa);AL.download(C,out=f"{E}_SS.mp4")
+	except A_:
+		try:
+			C=Q['hls'];C=An.b64decode(C);C=C.decode(Aa);E=E+'_SS.mp4';b={B0:E}
+			with Al(b)as c:
+				try:c.download(C)
+				except AX as d:pass
+			Ap()
+		except A_:A('Could not find downloadable URL. Voe might have change their site. Check that you are running the latest version of voe-dl, and if so file an issue on GitHub.');quit()
+	A(I);return E
+def Ap():
+	A=C.getcwd()
+	for B in glob.iglob(C.path.join(A,'*.part')):C.remove(B)
 import sys as P,http.server
 def C1(title='AniWorld Scraper'):
 	B=title
@@ -189,11 +189,11 @@ def C1(title='AniWorld Scraper'):
 	else:A(f"]0;{B}\a")
 def h(url):
 	Z='span';P='a';G=url
-	if AC not in G:A(B.WARNING+BD+B.ENDC);K.sleep(2);return
-	if not BE in G:A(B.WARNING+BF+B.ENDC);K.sleep(2);return
+	if AC not in G:A(B.WARNING+BE+B.ENDC);K.sleep(2);return
+	if not BF in G:A(B.WARNING+BG+B.ENDC);K.sleep(2);return
 	g=R.get(G);a=g.text
 	if Ab in a:A(f"{B.WARNING}DDoS-Guard detected{B.ENDC}");A(Ac);K.sleep(2);return
-	D=w.BeautifulSoup(a,r);E=D.find(AA,class_='series-title').find('h1').string;E=E.strip();E=E.split(I)[0];A('Getting info for:',E);h=D.find('p',class_='seri_des').get('data-full-description');O=D.find(Z,itemprop='startDate').string;Q=D.find(Z,itemprop='endDate').string
+	D=w.BeautifulSoup(a,s);E=D.find(AA,class_='series-title').find('h1').string;E=E.strip();E=E.split(I)[0];A('Getting info for:',E);h=D.find('p',class_='seri_des').get('data-full-description');O=D.find(Z,itemprop='startDate').string;Q=D.find(Z,itemprop='endDate').string
 	if Q=='heute':T='ONGOING'
 	else:T='FINISHED'
 	C=D.find(AD,string='Staffeln:').parent.parent.parent.find_all('li');C=[A.text for A in C];C=[A.replace(j,J)for A in C];C=[A for A in C if A];C=[A for A in C if A.isnumeric()];C=V(C);L={}
@@ -201,13 +201,13 @@ def h(url):
 	L=L;f=sum(L.values());U=D.find(AA,class_='seriesCoverBox').find('noscript').find('img').get('src');U=z+U;i=D.find(P,class_='trailerButton').get(AE);Y=D.find_all(P,itemprop='genre');Y=[A.string for A in Y];m=D.find(AD,class_='seriesProducer').text;n=D.find(AA,class_=Ad).get('data-fsk');M=D.find(P,class_='imdb-link')
 	if M is not F:M=M.get(AE)
 	else:M=J
-	A(T+' ('+O+' - '+Q+') - '+H(f)+' episodes - '+H(C)+' seasons');o={N:E,k:h,BG:{'year':S(O[:4]),'season':O[5:]},b:T,c:L,l:f,d:C,W:O,X:Q,A0:U,BH:i,t:Y,BI:m,Ad:n,'imdb':M,Ae:G};return o
+	A(T+' ('+O+' - '+Q+') - '+H(f)+' episodes - '+H(C)+' seasons');o={N:E,k:h,BH:{'year':S(O[:4]),'season':O[5:]},b:T,c:L,l:f,d:C,W:O,X:Q,A0:U,BI:i,t:Y,BJ:m,Ad:n,'imdb':M,Ae:G};return o
 def A5(info):
 	B=info;A('Setting up anime folder...');F=f"{B[N]} ({B[W]}-{B[X]})";F=g.sub(u,J,F);F=f"anime/{F}";I=f"./{F}"
 	if not C.path.exists(F):C.makedirs(F)
 	with E(f"{F}/info.json",T)as G:D.dump(B,G,indent=4)
 	K=B[A0].split('.')[-1]
-	if not C.path.exists(f"{I}/image.{K}"):AK.download(B[A0],f"{I}/image.{K}")
+	if not C.path.exists(f"{I}/image.{K}"):AL.download(B[A0],f"{I}/image.{K}")
 	B[A0]=f"image.{K}";B[v]=I
 	with E(f"{F}/info.json",T)as G:D.dump(B,G,indent=4)
 	if C.path.exists(AF):
@@ -221,7 +221,7 @@ def A5(info):
 	A('Anime folder setup complete')
 def AM(url,season,episodes=F,info=F):
 	T='Season stream urls already exist';S=url;L=info;K=season;G=episodes
-	if G is F:U=R.get(S);Y=U.text;a=w.BeautifulSoup(Y,r);G=a.find(AD,string=BJ).parent.parent.parent;G=G.find_all('li');G=V(G)-1
+	if G is F:U=R.get(S);Y=U.text;a=w.BeautifulSoup(Y,s);G=a.find(AD,string=BK).parent.parent.parent;G=G.find_all('li');G=V(G)-1
 	A(f"Getting streams for season {K} with {G} episodes...");M=f"{L[N]} ({L[W]}-{L[X]})";M=g.sub(u,J,M);A('Path:',M)
 	if C.path.exists(y+M+A1):
 		with E(y+M+A1,O)as b:
@@ -241,12 +241,12 @@ def AN(percent):A=percent;B=50;C=S(round(B*A));D='='*C+'-'*(B-C);P.stdout.write(
 def AO(url,season,episode,info=F):
 	b='No stream url found';a=url;Y=info;V=episode;L=season;a=a+f"/staffel-{L}/episode-{V}";e=R.get(a);c=e.text
 	if Ab in c:A(f"{B.WARNING}DDoS-Guard detected{B.ENDC}");A(Ac);K.sleep(2);return
-	d=w.BeautifulSoup(c,r)
+	d=w.BeautifulSoup(c,s)
 	if Y is not F:I=f"{Y[N]} ({Y[W]}-{Y[X]})";I=g.sub(u,J,I);I=f"anime/{I}/stream.json"
 	else:I=f"stream.json"
 	M=d.find('i',class_='icon VOE')
 	if M is F:A('No voe download found, skipping...');return
-	M=M.parent;M=M.get(AE);M=z+M;U=Ap(M)
+	M=M.parent;M=M.get(AE);M=z+M;U=Aq(M)
 	if U is F:A(b);return
 	if C.path.exists(I):
 		with E(I,O)as S:G=D.load(S)
@@ -257,7 +257,7 @@ def AO(url,season,episode,info=F):
 	with E(I,T)as S:D.dump(G,S,indent=4)
 	P=d.find('i',class_='icon Streamtape')
 	if P is F:A('No streamtape download found, skipping...');return
-	P=P.parent;P=P.get(AE);P=z+P;U=Ap(P)
+	P=P.parent;P=P.get(AE);P=z+P;U=Aq(P)
 	if U is F:A(b);return
 	if C.path.exists(I):
 		with E(I,O)as S:G=D.load(S)
@@ -268,14 +268,14 @@ def AO(url,season,episode,info=F):
 	with E(I,T)as S:D.dump(G,S,indent=4)
 	if G[Q][H(L)][H(V)]is not F:return G[Q][H(L)][H(V)]
 	else:return U
-def Ap(url):
+def Aq(url):
 	B=R.head(url)
 	if B.status_code!=302 and B.status_code!=301:A('No redirect found');return
 	else:
 		C=B.headers['Location']
 		if AC in C:A('Something went wrong with the redirect');return
 		else:return C
-def Bj(url,season):B=url;B=B+f"/staffel-{season}";C=R.get(B);D=C.text;E=w.BeautifulSoup(D,r);A=E.find(AD,string=BJ).parent.parent.parent;A=A.find_all('li');A=V(A)-1;return A
+def Bj(url,season):B=url;B=B+f"/staffel-{season}";C=R.get(B);D=C.text;E=w.BeautifulSoup(D,s);A=E.find(AD,string=BK).parent.parent.parent;A=A.find_all('li');A=V(A)-1;return A
 def Bk(season,episode,info=F):
 	H=episode;I=season;C=info;L();M()
 	if C is F:
@@ -283,7 +283,7 @@ def Bk(season,episode,info=F):
 	else:
 		B=f"{C[N]} ({C[W]}-{C[X]})";B=g.sub(u,J,B);B=f"anime/{B}"
 		with E(B+A1,O)as G:K=D.load(G)
-	A(f"Downloading season {I} episode {H}...");AL(B,I,H)
+	A(f"Downloading season {I} episode {H}...");AK(B,I,H)
 def AP(season,info=F):
 	C=info;G=season
 	if C is F:
@@ -291,7 +291,7 @@ def AP(season,info=F):
 	else:
 		B=f"{C[N]} ({C[W]}-{C[X]})";B=g.sub(u,J,B);B=f"anime/{B}"
 		with E(B+A1,O)as K:P=D.load(K)
-	for R in P[Q][H(G)]:L();M();A(f"Downloading season {G} episode {R}...");AN(S(R)/V(P[Q][H(G)]));A(I);AL(B,G,R)
+	for R in P[Q][H(G)]:L();M();A(f"Downloading season {G} episode {R}...");AN(S(R)/V(P[Q][H(G)]));A(I);AK(B,G,R)
 def Bl(season,start,end,info=F):
 	P=season;G=start;C=info
 	if C is F:
@@ -299,8 +299,8 @@ def Bl(season,start,end,info=F):
 	else:
 		B=f"{C[N]} ({C[W]}-{C[X]})";B=g.sub(u,J,B);B=f"anime/{B}"
 		with E(B+A1,O)as H:Q=D.load(H)
-	for K in p(G,end+1):L();M();A(f"Downloading season {P} episode {K}...");AN((K-G)/(end-G));A(I);AL(B,P,K)
-def Aq(query):
+	for K in p(G,end+1):L();M();A(f"Downloading season {P} episode {K}...");AN((K-G)/(end-G));A(I);AK(B,P,K)
+def Ar(query):
 	E=query
 	if E==J or E==F:A(B.WARNING+'No query entered'+B.ENDC);K.sleep(2);return
 	G='https://aniworld.to/ajax/search';H={'accept':'*/*','accept-language':'en-US,en;q=0.9','content-type':'application/x-www-form-urlencoded; charset=UTF-8','origin':z,'referer':f"https://aniworld.to/search?q={E}",'sec-ch-ua':'"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"','sec-ch-ua-mobile':'?0','sec-ch-ua-platform':'"Windows"','sec-fetch-dest':'empty','sec-fetch-mode':'cors','sec-fetch-site':'same-origin','user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36','x-requested-with':'XMLHttpRequest'};C={'keyword':E};C=R.post(G,headers=H,data=C);C=C.text
@@ -317,7 +317,7 @@ def AQ(query,data):
 	elif not D.isnumeric():A(O);K.sleep(2);AQ(H,C);return
 	elif S(D)<1 or S(D)>V(C):A(O);K.sleep(2);AQ(H,C);return
 	D=S(D);R=C[D-1][E];A('Selected:',C[D-1][N]);P=z+R;A('Aniworld URL:',P);return P
-def Ar():
+def As():
 	B=3333;D=http.server.SimpleHTTPRequestHandler;E=C.path.join(C.getcwd(),a);C.chdir(E)
 	with http.server.HTTPServer((J,B),D)as F:A('serving at http://localhost:'+H(B)+'/');A('Press Ctrl+C to stop the server');F.serve_forever()
 def AR():
@@ -338,7 +338,7 @@ def AR():
 			if K.lower()=='n':continue
 			A('Removing:',F[N]);m.rmtree(f"anime/{H}");continue
 		if y in F[v]:F[v]=F[v].replace(y,J)
-		e=[N,k,BG,b,c,l,d,W,X,A0,BH,t,BI,Ad,'imdb']
+		e=[N,k,BH,b,c,l,d,W,X,A0,BI,t,BJ,Ad,'imdb']
 		if not all(A in F for A in e):A('Rebuilding info.json for:',F[N]);F=h(F[Ae]);A5(F)
 		Z.append({N:F[N],t:F[t],W:F[W],X:F[X],b:F[b],k:F[k],l:F[l],d:F[d],v:f"{H}"})
 	with E(AF,T)as Q:D.dump(Z,Q,indent=4)
@@ -365,7 +365,7 @@ def Bm():
 	if not C.path.exists(C.path.join(C.getcwd(),A3)):C.makedirs(C.path.join(C.getcwd(),A3))
 	with E(C.path.join(C.getcwd(),'downloads/downloads.json'),T)as N:D.dump(G,N,indent=4)
 	A('downloads.json rebuilt')
-def As(url):
+def At(url):
 	C='episode';D='staffel';B=url
 	if AC not in B:A(Ai);return AZ
 	if D in B:B=B.split(D)[0]
@@ -387,25 +387,25 @@ def Bo():
 def Bp():AT()
 def A7():return AZ
 def n():
-	B='./assets/animeList.json';return;A(BK);H='https://raw.githubusercontent.com/manami-project/anime-offline-database/master/anime-offline-database-minified.json';I='https://api.github.com/repos/manami-project/anime-offline-database/commits?path=anime-offline-database-minified.json&page=1&per_page=1';J=R.get(I);F=J.json();K=F[0]['commit']['committer']['date'][:10]
+	B='./assets/animeList.json';return;A(BL);H='https://raw.githubusercontent.com/manami-project/anime-offline-database/master/anime-offline-database-minified.json';I='https://api.github.com/repos/manami-project/anime-offline-database/commits?path=anime-offline-database-minified.json&page=1&per_page=1';J=R.get(I);F=J.json();K=F[0]['commit']['committer']['date'][:10]
 	if C.path.exists(B):
 		with E(B,O)as G:F=D.load(G)
 		L=F['lastUpdate']
 		if L==K:A('Anime list is up to date');return
-	A('Downloading anime list...');AK.download(H,B);F=D.load(E(B,O,encoding=Aa))
+	A('Downloading anime list...');AL.download(H,B);F=D.load(E(B,O,encoding=Aa))
 	with E(B,T)as G:D.dump(F,G,indent=4)
 	A('Anime list downloaded')
 def L():A('\x1b[H\x1b[J')
 def U():
-	F='Enter the url of the anime';H='Invalid key';L();M();A('Press one of the following keys:');A(BL);A(BM);A(BN);A(BO);A(BP);A(BQ);A(BR);A(BS);A(BT);D=G()
-	if D not in[q,'2','3','4','5','6','7','8','9','0','q','Q','h','i']:A(H);U();return
-	if D==q:AV()
+	F='Enter the url of the anime';H='Invalid key';L();M();A('Press one of the following keys:');A(BM);A(BN);A(BO);A(BP);A(BQ);A(BR);A(BS);A(BT);A(BU);D=G()
+	if D not in[r,'2','3','4','5','6','7','8','9','0','q','Q','h','i']:A(H);U();return
+	if D==r:AV()
 	elif D=='x':
-		A('This mode will download everything from the given url');A(F);E=G();E=As(E)
+		A('This mode will download everything from the given url');A(F);E=G();E=At(E)
 		if not E:A(B.WARNING+Ai+B.ENDC);K.sleep(2);U();return
-		Ay(E)
+		Az(E)
 	elif D=='2':A('Not implemented yet');K.sleep(2);U()
-	elif D=='3':Ar()
+	elif D=='3':As()
 	elif D=='4':AR()
 	elif D=='5':
 		if C.name==AB:C.system('start .\\anime')
@@ -413,11 +413,11 @@ def U():
 		else:A('Unsupported os');A('The anime folder is located in the following directory:');A(C.getcwd()+'\\anime');A('\nPress enter to continue');G();U()
 		U()
 	elif D=='6':
-		A(F);E=G();E=As(E)
+		A(F);E=G();E=At(E)
 		if not E:A(B.WARNING+Ai+B.ENDC);K.sleep(2);U();return
 		A(h(E))
 	elif D=='0':Bp();U()
-	elif D=='h'or D=='i':L();M();A(B.PRIMARY+'Info'+B.ENDC);A(I);A(f"{B.OK}This program was made by JMcrafter26 and published by Someone266 on Github{B.ENDC}");A(f"{B.OK}The program is open source and can be found here: https://github.com/Someone266/aniworld-downloader/{B.ENDC}");A(I);A('This program is still in development, so there might be some bugs');A('If you find a bug, please report it on the Github page');A(I);A(f"{B.OK}This program is for educational purposes only, the developer nor the publisher is responsible for any damage caused by the program. This program is not affiliated with any of the anime sites. This program is provided as is, without any warranty. Use at your own risk.{B.ENDC}");A(I);A(i);G();Av()
+	elif D=='h'or D=='i':L();M();A(B.PRIMARY+'Info'+B.ENDC);A(I);A(f"{B.OK}This program was made by JMcrafter26 and published by Someone266 on Github{B.ENDC}");A(f"{B.OK}The program is open source and can be found here: https://github.com/Someone266/aniworld-downloader/{B.ENDC}");A(I);A('This program is still in development, so there might be some bugs');A('If you find a bug, please report it on the Github page');A(I);A(f"{B.OK}This program is for educational purposes only, the developer nor the publisher is responsible for any damage caused by the program. This program is not affiliated with any of the anime sites. This program is provided as is, without any warranty. Use at your own risk.{B.ENDC}");A(I);A(i);G();Aw()
 	elif D=='q'or D=='Q':A('Quitting...');x()
 	else:A(B.WARNING+H+B.ENDC);K.sleep(2);U();return
 def Bq():
@@ -426,40 +426,40 @@ def Bq():
 	if not C.path.exists(D):C.makedirs(D)
 	Br()
 def Br():
-	D='updateNotes';E='Update notes:';L();M();A(B.PRIMARY+'Step 1: Checking for updates and downloading assets'+B.ENDC);A('We promise, it will be quick');C=Ax()
+	D='updateNotes';E='Update notes:';L();M();A(B.PRIMARY+'Step 1: Checking for updates and downloading assets'+B.ENDC);A('We promise, it will be quick');C=Ay()
 	if C is F:A('Hmm, something went wrong with the update check');A('Do you have an internet connection? \n');A(B.SECONDARY+'PS: We need an internet connection to download the assets'+B.ENDC);A(B.SECONDARY+AH+B.ENDC);G();x()
-	if C[b]=='error':A(B.WARNING+BU+B.ENDC);A(Aj,C[BV]);A('Please try again later\n');A(B.SECONDARY+AH+B.ENDC);G();x()
-	elif C[b]==BW:A(BX);A(B.SECONDARY+i+B.ENDC);G();AS();return
+	if C[b]=='error':A(B.WARNING+BV+B.ENDC);A(Aj,C[BW]);A('Please try again later\n');A(B.SECONDARY+AH+B.ENDC);G();x()
+	elif C[b]==BX:A(BY);A(B.SECONDARY+i+B.ENDC);G();AS();return
 	else:
-		if C[AI][Y]:A(B.OK+BY+B.ENDC);A(E);A(C[D][Y]+I);A8(Y,C[AJ][Y])
-		if C[AI][f]:A(B.OK+BZ+B.ENDC);A(E);A(C[D][f]+I);A8(f,C[AJ][f])
+		if C[AI][Y]:A(B.OK+BZ+B.ENDC);A(E);A(C[D][Y]+I);A8(Y,C[AJ][Y])
+		if C[AI][f]:A(B.OK+Ba+B.ENDC);A(E);A(C[D][f]+I);A8(f,C[AJ][f])
 		else:A('No program update available')
 		A(B.SECONDARY+i+B.ENDC);G();AS();return
-def AS():L();M();A(B.PRIMARY+'Step 2: Configuring the program'+B.ENDC);A('We need to configure the program before we can continue');A('It is very simple, just answer a few questions');A(B.SECONDARY+i+B.ENDC);G();At()
-def At():
-	L();M();A(B.PRIMARY+'Choose the option that describes you the best'+B.ENDC);A('1. I want to archive anime and have it nicely organized (with filestructure, prictures and an offline webserver)');A('2. I just want to download anime fast and continue watching (No filestructure, ready to watch or move)');A(I);A(B.SECONDARY+Ba+B.ENDC);C=G()
-	if C==q:A6(A4,Bb)
-	elif C=='2':A6(A4,Bc)
-	else:A(Bd);At();return
-	Au()
+def AS():L();M();A(B.PRIMARY+'Step 2: Configuring the program'+B.ENDC);A('We need to configure the program before we can continue');A('It is very simple, just answer a few questions');A(B.SECONDARY+i+B.ENDC);G();Au()
 def Au():
-	L();M();A(B.PRIMARY+'Select your preferred host'+B.ENDC);A('1. Voe (Recommended)');A('2. Streamtape');A(I);A(B.SECONDARY+Ba+B.ENDC);C=G()
-	if C==q:A6(s,Q)
-	elif C=='2':A6(s,Z)
-	else:A(Bd);Au();return
+	L();M();A(B.PRIMARY+'Choose the option that describes you the best'+B.ENDC);A('1. I want to archive anime and have it nicely organized (with filestructure, prictures and an offline webserver)');A('2. I just want to download anime fast and continue watching (No filestructure, ready to watch or move)');A(I);A(B.SECONDARY+Bb+B.ENDC);C=G()
+	if C==r:A6(A4,Bc)
+	elif C=='2':A6(A4,Bd)
+	else:A(Be);Au();return
+	Av()
+def Av():
+	L();M();A(B.PRIMARY+'Select your preferred host'+B.ENDC);A('1. Voe (Recommended)');A('2. Streamtape');A(I);A(B.SECONDARY+Bb+B.ENDC);C=G()
+	if C==r:A6(q,Q)
+	elif C=='2':A6(q,Z)
+	else:A(Be);Av();return
 	Bs()
 def Bs():
 	L();M();A(B.PRIMARY+'Thats it, you are ready to go'+B.ENDC);A('You can now start downloading anime');A(I);A('Press i to read the instructions');A('Press enter to just freakin start the program');C=G()
-	if C=='i':Av()
+	if C=='i':Aw()
 	U()
-def Av():L();M();A(B.PRIMARY+'Instructions'+B.ENDC);A(BL);A('This option will guide you through the download process, you just need to enter the url of the anime');A(BM);A('This option is not implemented yet');A(BN);A('This option will start a webserver to serve the content - you can watch the anime in your browser (even offline and other devices)');A(BO);A('This option will clean up the program and the assets');A(BP);A('This option will open the anime folder where the anime is stored');A(BQ);A('This option will get the info of the anime from the url');A(BR);A('This option will allow you to change the settings of the program');A(BS);A('This is the current screen :)');A(BT);A(I);A(i);G();U()
-Aw={A4:"The mode of AniDown\n'archive' will organize the anime with filestructure, pictures and an offline webserver\n'download' will download anime fast and continue watching",s:'The preferred host to download from'}
-o={A4:[Bb,Bc],s:[Q,Z]}
-type={A4:Ak,s:Ak}
+def Aw():L();M();A(B.PRIMARY+'Instructions'+B.ENDC);A(BM);A('This option will guide you through the download process, you just need to enter the url of the anime');A(BN);A('This option is not implemented yet');A(BO);A('This option will start a webserver to serve the content - you can watch the anime in your browser (even offline and other devices)');A(BP);A('This option will clean up the program and the assets');A(BQ);A('This option will open the anime folder where the anime is stored');A(BR);A('This option will get the info of the anime from the url');A(BS);A('This option will allow you to change the settings of the program');A(BT);A('This is the current screen :)');A(BU);A(I);A(i);G();U()
+Ax={A4:"The mode of AniDown\n'archive' will organize the anime with filestructure, pictures and an offline webserver\n'download' will download anime fast and continue watching",q:'The preferred host to download from'}
+o={A4:[Bc,Bd],q:[Q,Z]}
+type={A4:Ak,q:Ak}
 def AT():
 	K=f"{C.getcwd()}\\settings.json";L();A('Settings:');A('Path:',K);A(I)
 	with E(e,O)as M:J=D.load(M)
-	for(F,N)in J.items():P=list(J.keys()).index(F)+1;A(f"{B.PRIMARY}({P}) - {F}: {N}{B.ENDC}");A(f"{B.OK}Description: {B.ENDC}{B.SECONDARY}{Aw[F]}{B.ENDC}");A(f"{B.OK}Options: {B.ENDC}{B.SECONDARY}{o[F]}{B.ENDC}");A('---')
+	for(F,N)in J.items():P=list(J.keys()).index(F)+1;A(f"{B.PRIMARY}({P}) - {F}: {N}{B.ENDC}");A(f"{B.OK}Description: {B.ENDC}{B.SECONDARY}{Ax[F]}{B.ENDC}");A(f"{B.OK}Options: {B.ENDC}{B.SECONDARY}{o[F]}{B.ENDC}");A('---')
 	A('Choose an option by pressing the number (q to quit):');H=G()
 	if not H or H=='q':return
 	if not H.isdigit():return AT()
@@ -487,22 +487,22 @@ def Bt(key):
 	return B[A]
 def C2():
 	A={}
-	for B in Aw:A[B]=o[B][0]
+	for B in Ax:A[B]=o[B][0]
 	with E(e,T)as C:D.dump(A,C)
 	return A
 import zipfile
 def Bu():
-	Bn();L();M();A('Loading...');B=Ax()
+	Bn();L();M();A('Loading...');B=Ay()
 	if B is F:A('No internet connection, skipping update check');return
-	if B[b]=='error':A(BU);A(Aj,B[BV]);K.sleep(2);return
-	elif B[b]==BW:A(BX);return
+	if B[b]=='error':A(BV);A(Aj,B[BW]);K.sleep(2);return
+	elif B[b]==BX:A(BY);return
 	else:
-		if B[AI][Y]:A(BY);A8(Y,B[AJ][Y])
-		if B[AI][f]:A(BZ);A8(f,B[AJ][f])
-def Ax():
-	F='anime/assets/.version';A(BK,end=J)
+		if B[AI][Y]:A(BZ);A8(Y,B[AJ][Y])
+		if B[AI][f]:A(Ba);A8(f,B[AJ][f])
+def Ay():
+	F='anime/assets/.version';A(BL,end=J)
 	try:R.get('https://api.jm26.net/status.txt',timeout=5)
-	except R.exceptions.ConnectionError:A(' Skipped');A(B.WARNING+Be+B.ENDC);K.sleep(2);return
+	except R.exceptions.ConnectionError:A(' Skipped');A(B.WARNING+Bf+B.ENDC);K.sleep(2);return
 	H='https://api.jm26.net/update/aniworld-down/check/';I=AW()
 	if not C.path.exists(F):G='0.0.0'
 	else:
@@ -513,9 +513,9 @@ def A8(type,hash):
 	if A7():L=L+'&os=windows'
 	if not C.path.exists(F):C.makedirs(F)
 	try:N=R.get(L)
-	except R.exceptions.ConnectionError:A(B.WARNING+Be+B.ENDC);A(S);A(AH);G();x()
+	except R.exceptions.ConnectionError:A(B.WARNING+Bf+B.ENDC);A(S);A(AH);G();x()
 	if N.headers['Content-Type']=='application/json':A(B.WARNING+'Something went wrong with the download'+B.ENDC);A(Aj,N.text);A(S);A(AH);G();x()
-	A(B.OK+Bf+B.ENDC)
+	A(B.OK+Bg+B.ENDC)
 	with E(M,'wb')as H:H.write(N.content)
 	with zipfile.ZipFile(M,O)as T:T.extractall(F)
 	C.remove(M)
@@ -539,21 +539,21 @@ def A8(type,hash):
 		else:C.system('python3 main.py '+j.join(P.argv[1:]))
 Bv='1.1.8'
 class B:PURPLE='\x1b[95m';SECONDARY='\x1b[90m';PRIMARY='\x1b[94m';CYAN='\x1b[96m';OK='\x1b[92m';WARNING='\x1b[93m';FAIL='\x1b[91m';ENDC='\x1b[0m';BOLD='\x1b[1m';UNDERLINE='\x1b[4m'
-def Ay(url):
+def Az(url):
 	n();C=h(url);A5(C)
 	for D in C[c]:AM(url,D,C[c][D],C)
 	E=C[d];A(E)
 	for D in p(1,E+1):AP(D,C)
 	AR();M();A(B.OK+'Finished downloading all episodes'+B.ENDC);A(I);A(B.PRIMARY+"Run 'serve' to watch the episodes in your browser"+B.ENDC)
 def AV():
-	L();M();n();A(B.OK+'This is the auto mode. It will ask you what to '+B.ENDC);A(I);A('Enter the name of the anime you want to search for or paste the url of the anime');D=G()
+	L();M();n();A(B.OK+'This is the auto mode. It will ask you what to download.'+B.ENDC);A(I);A('Enter the name of the anime you want to search for or paste the url of the anime');D=G()
 	if D.startswith('http'):
 		C=D
-		if AC not in C:A(B.WARNING+BD+B.ENDC);K.sleep(2);return
-		if not BE in C:A(B.WARNING+BF+B.ENDC);K.sleep(2);return
+		if AC not in C:A(B.WARNING+BE+B.ENDC);K.sleep(2);return
+		if not BF in C:A(B.WARNING+BG+B.ENDC);K.sleep(2);return
 		if Ag in C:C=C.split(Ag)[0]
 		if Ah in C:C=C.split(Ah)[0]
-	elif D!=J and D!=F:C=Aq(D)
+	elif D!=J and D!=F:C=Ar(D)
 	else:A('Invalid input');K.sleep(2);AV();return
 	E=h(C);A5(E)
 	for H in E[c]:AM(C,H,E[c][H],E)
@@ -574,7 +574,7 @@ def A9(url,info):
 	else:
 		A(B.OK+'Downloading all episodes'+B.ENDC)
 		for D in p(1,C[d]+1):AP(D,C)
-	A(B.OK+Bf+B.ENDC);A(I);A(B.PRIMARY+'Press enter to return to the main menu'+B.ENDC);G();U()
+	A(B.OK+Bg+B.ENDC);A(I);A(B.PRIMARY+'Press enter to return to the main menu'+B.ENDC);G();U()
 def AW():return Bv
 def Bw(url):n();A=h(url);return A
 def Bx(url):n();A=h(url);A5(A)
@@ -586,7 +586,7 @@ def Bz(url,season,episode,info=F):
 	C=season;A=info;B=episode;n()
 	if A is not F:B=A[c][C][B]
 	D=AO(url,C,B,A);return D
-def B_():L();M();A('Enter the name of the anime you want to search for');B=G();return Aq(B)
+def B_():L();M();A('Enter the name of the anime you want to search for');B=G();return Ar(B)
 def M():
 	A(I);C=AW()
 	if A7():C=C+' (Windows)'
@@ -598,10 +598,10 @@ def C0():
 	if C=='guideUpdateFinished':Bo();return
 	Bu();L();M();A(I)
 	if C=='getinfo':D=P.argv[3];A(Bw(D))
-	elif C=='run':D=P.argv[2];Ay(D)
+	elif C=='run':D=P.argv[2];Az(D)
 	elif C=='ui':U()
 	elif C==N:B_();return
-	elif C==K:Ar()
+	elif C==K:As()
 	elif C==J:AR()
 	elif C=='setup':D=P.argv[3];Bx(D)
 	elif C=='auto':AV()
