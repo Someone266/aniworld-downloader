@@ -31,7 +31,7 @@ def vdownload(URL):
         i0 = html_page.text.find(START)
         i1 = html_page.text.find("'",i0+L)
         url = html_page.text[i0+L:i1]
-        return download(url)
+        return vdownload(url)
 
     name_find = soup.find('meta', attrs={"name":"og:title"})
     name = name_find["content"]

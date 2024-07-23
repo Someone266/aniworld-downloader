@@ -12,7 +12,7 @@ import shutil
 import main
 import gui
 import main
-import download
+import dl_download
 import settings
 
 def setTitle(title = 'AniWorld Scraper'):
@@ -463,7 +463,7 @@ def downloadEpisode(season, episode, info = None):
     # get the stream url from the json file
     # streamUrl = data[str(season)][str(episode)]
     # print(streamUrl)
-    download.dmain(pathname, season, episode)
+    dl_download.dmain(pathname, season, episode)
 
 def downloadSeason(season, info = None):
     if info is None:
@@ -483,7 +483,7 @@ def downloadSeason(season, info = None):
         print(f'Downloading season {season} episode {episode}...')
         updateProgress(int(episode) / len(data["voe"][str(season)]))
         print("\n")
-        download.dmain(pathname, season, episode)
+        dl_download.dmain(pathname, season, episode)
 
 def downloadRange(season, start, end, info = None):
     if info is None:
@@ -503,7 +503,7 @@ def downloadRange(season, start, end, info = None):
         print(f'Downloading season {season} episode {episode}...')
         updateProgress((episode - start) / (end - start))
         print("\n")
-        download.dmain(pathname, season, episode)
+        dl_download.dmain(pathname, season, episode)
     
     return
 
