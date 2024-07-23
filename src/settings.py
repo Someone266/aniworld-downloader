@@ -83,3 +83,11 @@ def getSetting(key):
         with open('settings.json', 'w') as f:
             json.dump(data, f)
     return data[key]
+
+def defaultSettings():
+    data = {}
+    for key in description:
+        data[key] = options[key][0]
+    with open('settings.json', 'w') as f:
+        json.dump(data, f)
+    return data

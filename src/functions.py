@@ -8,7 +8,6 @@ import sys
 import bs4
 import http.server
 import shutil
-import zipfile
 
 import main
 import gui
@@ -27,15 +26,16 @@ def setTitle(title = 'AniWorld Scraper'):
 
 def getInfo(url):
 
-    # if url contains /filme/, write unsupported (for now)
-    if '/filme/' in url:
-        print(main.bcolors.WARNING + 'This type of url is not supported yet. It will probably be supported in the future' + main.bcolors.ENDC)
-        time.sleep(2)
-        return
     
     # if url has not aniworld.to in it, return
     if 'aniworld.to' not in url:
         print(main.bcolors.WARNING + 'Invalid url! Please enter a valid aniworld.to url' + main.bcolors.ENDC)
+        time.sleep(2)
+        return
+    
+        # if url contains /filme/, write unsupported (for now)
+    if not 'anime/stream' in url:
+        print(main.bcolors.WARNING + 'This type of url is not supported yet. It may be supported in the future' + main.bcolors.ENDC)
         time.sleep(2)
         return
 
@@ -463,7 +463,7 @@ def downloadEpisode(season, episode, info = None):
     # get the stream url from the json file
     # streamUrl = data[str(season)][str(episode)]
     # print(streamUrl)
-    download.main(pathname, season, episode)
+    download.dmain(pathname, season, episode)
 
 def downloadSeason(season, info = None):
     if info is None:
@@ -483,7 +483,7 @@ def downloadSeason(season, info = None):
         print(f'Downloading season {season} episode {episode}...')
         updateProgress(int(episode) / len(data["voe"][str(season)]))
         print("\n")
-        download.main(pathname, season, episode)
+        download.dmain(pathname, season, episode)
 
 def downloadRange(season, start, end, info = None):
     if info is None:
@@ -503,7 +503,7 @@ def downloadRange(season, start, end, info = None):
         print(f'Downloading season {season} episode {episode}...')
         updateProgress((episode - start) / (end - start))
         print("\n")
-        download.main(pathname, season, episode)
+        download.dmain(pathname, season, episode)
     
     return
 
@@ -646,10 +646,8 @@ def searchAnime1(query, data):
     # get the link of the selected item
     link = data[number - 1]['link']
     print('Selected:', data[number - 1]['title'])
-    print(link)
-    # e.g. url: /anime/stream/solo-leveling
     url = 'https://aniworld.to' + link
-    print('url:', url)
+    print('Aniworld URL:', url)
     return url
 
 
@@ -756,17 +754,14 @@ def clean():
     
     # remove files
     removeFiles = [
-        'assets/bootstrap.min.css',
-        'assets/main.css',
-        'assets/main.js',
-        'assets/plyr.css',
-        'assets/plyr.js',
-        'assets/animeList.json',
-        'assets/placeholder.jpg',
-        'assets/fuse.min.js',
-        'assets/.version',
         # 'functions.py',
         # 'voe.py'
+        'urls.txt',
+        'search.html',
+        'search.txt',
+        'temp.html',
+        'update.bat',
+        'update.exe',
     ]
     print('Removing unused files...')
     for file in removeFiles:
@@ -776,7 +771,8 @@ def clean():
     
     # if assets folder exists, remove it
     if os.path.exists('assets'):
-        os.rmdir('assets')
+        # remove all files inside the assets folder and the folder itself
+        shutil.rmtree('assets')
         print('Removed: assets/')
     
     # check if downloads folder exists
@@ -788,6 +784,8 @@ def clean():
                 os.rmdir(f'downloads/{folder}')
                 print('Removed:', f'downloads/{folder}')
     
+    buildDownloadsJson()
+    
     print('Done')
     print('Press enter to continue')
     # return to main menu
@@ -795,6 +793,51 @@ def clean():
     gui.startUi()
     return
 
+def buildDownloadsJson():
+    # get all the episodes inside anime/[animename]/video/[season]/[episode].mp4 and set the status to downloaded
+    # e.g.:
+    # {
+    #     "title": "Solo Leveling",
+    #     "1": {
+    #         "1": "downloaded",    
+    #         "2": "downloaded",
+    #         "3": "downloaded"
+    #     },
+    #     "2": {
+    #         "1": "downloaded",
+    #         "2": "downloaded"
+    #     }
+    # }
+    # get all folders in the anime folder
+    folders = [f for f in os.listdir(os.path.join(os.getcwd(), 'anime')) if os.path.isdir(os.path.join(os.getcwd(), 'anime', f))]
+    # remove assets from folders
+    if 'assets' in folders:
+        folders.remove('assets')
+    
+
+    data = {}
+    for folder in folders:
+        # get all files in the video folder
+        videos = [f for f in os.listdir(os.path.join(os.getcwd(), 'anime', folder, 'video')) if os.path.isfile(os.path.join(os.getcwd(), 'anime', folder, 'video', f))]
+        # get all seasons
+        seasons = [f for f in os.listdir(os.path.join(os.getcwd(), 'anime', folder, 'video')) if os.path.isdir(os.path.join(os.getcwd(), 'anime', folder, 'video', f))]
+        data[folder] = {}
+        for season in seasons:
+            data[folder][season] = {}
+            episodes = [f for f in os.listdir(os.path.join(os.getcwd(), 'anime', folder, 'video', season)) if os.path.isfile(os.path.join(os.getcwd(), 'anime', folder, 'video', season, f))]
+            for episode in episodes:
+                epName = episode.split('.')[0]
+                data[folder][season][epName] = 'downloaded'
+    # if path downloads does not exist, create it
+    if not os.path.exists(os.path.join(os.getcwd(), 'downloads')):
+        os.makedirs(os.path.join(os.getcwd(), 'downloads'))
+    
+    # save the data to downloads.json
+    with open(os.path.join(os.getcwd(), 'downloads/downloads.json'), 'w') as f:
+        json.dump(data, f, indent=4)
+
+    print('downloads.json rebuilt')
+    return
 
 
 def validateUrl(url):

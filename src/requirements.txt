@@ -1,0 +1,5 @@
+beautifulsoup4
+Requests
+wget
+yt_dlp
+js2py

@@ -15,7 +15,7 @@ import update
 
 # use auto-py-to-exe to convert this to an exe
 # VERSION
-version = "1.1.7"
+version = "1.1.8"
 
 class bcolors:
     PURPLE = '\033[95m' # #9b59b6
@@ -58,7 +58,24 @@ def runAuto():
     print("Enter the name of the anime you want to search for or paste the url of the anime")
     choice = input()
     if choice.startswith("http"):
-        print(url)
+        url = choice
+        if 'aniworld.to' not in url:
+            print(bcolors.WARNING + 'Invalid url! Please enter a valid aniworld.to url' + bcolors.ENDC)
+            time.sleep(2)
+            return
+        
+            # if url contains /filme/, write unsupported (for now)
+        if not 'anime/stream' in url:
+            print(bcolors.WARNING + 'This type of url is not supported yet. It may be supported in the future' + bcolors.ENDC)
+            time.sleep(2)
+            return
+        # https://aniworld.to/anime/stream/death-note/staffel-1/episode-1
+        # if it contains /episode-[number], remove it
+        if '/episode-' in url:
+            url = url.split('/episode-')[0]
+        if '/staffel-' in url:
+            url = url.split('/staffel-')[0]
+        
     elif choice != "" and choice != None:
         url = functions.searchAnime(choice)
     else:
