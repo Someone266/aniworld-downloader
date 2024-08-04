@@ -4,6 +4,9 @@
 
 Aniworld Down ist ein Tool, um Videos von AniWorld (ehemalig AniCloud) herunterzuladen und zu organisieren.
 
+> ⚠️ Wichtig: Das Projekt ist nicht tot!  Ich bin gerade im Urlaub und kann deshalb nicht coden. Sobald ich zurück bin werde ich daran writerarbeiten.
+> Pull Requests sind willkommen
+
 [English](en_README.md)
 
 ## Funktionen
