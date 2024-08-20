@@ -4,8 +4,6 @@
 
 Aniworld Down ist ein Tool, um Videos von AniWorld (ehemalig AniCloud) herunterzuladen und zu organisieren.
 
-> ⚠️ Wichtig: **Das Projekt ist nicht tot**!  Ich bin gerade im Urlaub und kann deshalb nicht coden. Sobald ich zurück bin werde ich daran writerarbeiten.
->
 > Pull Requests sind willkommen
 
 [English](en_README.md)
@@ -23,11 +21,23 @@ Aniworld Down ist ein Tool, um Videos von AniWorld (ehemalig AniCloud) herunterz
 
 soon
 
+## Voraussetzungen
+
+> Diese Voraussetzungen gelten nicht für den Windows release (exe), da es bereits in der Datei enthalten ist
+
+- Python installiert (Python 3.11 empfohlen - AniWorld Down wird für diese Version entwickelt)
+- Pip
+
 ## Installation
 
-soon
+Gehe zu [Releases](https://github.com/Someone266/aniworld-downloader/releases/latest).
+
+- **Windows:** Lade `AniWorld-Down.exe` herunter
+- **Linux und co:** Lade `main.py` herunter und installiere die benötigten Python Pakete (`requirements.txt`)
 
 ## Bedienung
+
+> **Es wird Python 3.11 empfohlen, da das Programm dafür ausgelegt ist**
 
 ### Windows
 
@@ -72,9 +82,9 @@ Diese Bugs werden höhstwarscheinlich im nächsten update behoben.
 - Filme können nicht heruntergeladen werden
 <!-- - Folgen werden im falschen Ordner heruntergeladen -->
 <!-- - Programmabstürze (z.B. aufgrund von captchas) -->
-- Nur voe als Hoster (streamtape api wird bald hinzugefügt)
+- ~~Nur voe als Hoster (streamtape api wird bald hinzugefügt)~~
 <!-- - Lokale Seite wird nicht richtig angezeigt -->
-- Update-Loop: Bitte den `assets` Ordner in `anime/` entfernen
+- ~~Update-Loop: Bitte den `assets` Ordner in `anime/` entfernen~~
 
 ## Disclaimer
 
