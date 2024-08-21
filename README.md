@@ -1,4 +1,6 @@
-![Icon](https://github.com/Someone266/aniworld-downloader/raw/main/.github/project/icon.png)
+<p align="center">
+  <img src="https://github.com/Someone266/aniworld-downloader/raw/main/.github/project/icon.png" alt="Icon" height="350px" />
+</p>
 
 # Aniworld Down
 
