@@ -103,7 +103,10 @@ def getInfo(url):
     picture = 'https://aniworld.to' + picture
 
     # get the trailer class="trailerButton"
-    trailer = soup.find('a', class_='trailerButton').get('href')
+    try:
+        trailer = soup.find('a', class_='trailerButton').get('href')
+    except:
+        trailer = ''
 
     # get the tags (itemprop="genre")
     tags = soup.find_all('a', itemprop='genre')
@@ -166,8 +169,8 @@ def setup(info):
     pathname = re.sub(r'[<>:"/\\|?*]', '', pathname)
 
     # the pathname is inside the current directory / anime / title (year-season)
-    pathname = f'anime/{pathname}'
     relPath = f'./{pathname}'
+    pathname = f'anime/{pathname}'
 
     # create the folder
     if not os.path.exists(pathname):
@@ -179,8 +182,8 @@ def setup(info):
     # get the filetype of the image
     filetype = info['picture'].split('.')[-1]
     # download the image, but first check if the image exists
-    if not os.path.exists(f'{relPath}/image.{filetype}'):
-        wget.download(info['picture'], f'{relPath}/image.{filetype}')
+    if not os.path.exists(f'{pathname}/image.{filetype}'):
+        wget.download(info['picture'], f'{pathname}/image.{filetype}')
     
     # replace picture with the image path
     info['picture'] = f'image.{filetype}'
@@ -272,13 +275,12 @@ def getSeasonDownloads(url, season, episodes = None, info = None):
             print('Found stream.json')
             print('Checking if season already exists...')
             if "voe" in data:
-                # check if it has minimum episodes of 1
-                if len(data["voe"][str(season)]) >= 1:
+                # check if the season already exists
+                if str(season) in data["voe"]:
                     print('Season stream urls already exist')
                     return data
             if "streamtape" in data:
-                # check if it has minimum episodes of 1
-                if len(data["streamtape"][str(season)]) >= 1:
+                if str(season) in data["streamtape"]:
                     print('Season stream urls already exist')
                     return data         
     else:
@@ -631,7 +633,7 @@ def searchAnime1(query, data):
     print(main.bcolors.PRIMARY + 'Select a number to continue, or press q to quit' + main.bcolors.ENDC)
     number = input()
     if number == 'q':
-        return
+        return False
     elif not number.isnumeric():
         print('Invalid number, try again')
         time.sleep(2)

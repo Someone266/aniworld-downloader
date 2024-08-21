@@ -7,15 +7,33 @@ import requests
 
 import main
 import functions
+import settings
 
 
 
-def checkForUpdates():
+def checkForUpdates(force=False):
     functions.firstRun()
     functions.clearConsole()
     main.showLogo()
     print('Loading...')
-    version = getLatestVersion()
+
+    try:
+        settings.defaultSettings()
+    except:
+        print('Something went wrong with the settings file')
+    
+    if(settings.getSetting('autoUpdate') == 'no' and not force):
+        print('Skipping update check')
+        time.sleep(2)
+        return
+
+    try:
+        version = getLatestVersion()
+    except:
+        print('Something went wrong with the update check')
+        time.sleep(2)
+        return
+    
     if version is None:
         print('No internet connection, skipping update check')
         return

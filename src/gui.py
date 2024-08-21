@@ -108,12 +108,56 @@ def startUi():
         # the developer nor the publisher is responsible for any damage caused by the program
         print(f'{main.bcolors.OK}This program is for educational purposes only, the developer nor the publisher is responsible for any damage caused by the program. This program is not affiliated with any of the anime sites. This program is provided as is, without any warranty. Use at your own risk.{main.bcolors.ENDC}')
         print('\n')
-        print('Press enter to continue')
-        input()
+        print('Press enter to continue (i to report a bug)')
+        key = input()
+        if key == 'i':
+            print('Opening the Github page...')
+            # https://github.com/Someone266/aniworld-downloader/issues
+            if os.name == 'nt':
+                os.system('start https://github.com/Someone266/aniworld-downloader/issues')
+                time.sleep(2)
+            elif os.name == 'posix':
+                os.system('xdg-open https://github.com/Someone266/aniworld-downloader/issues')
+                time.sleep(2)
+            else:
+                print('Unsupported os')
+                print('The Github page is located at the following link:')
+                print('https://github.com/Someone266/aniworld-downloader/issues')
+                print('\nPress enter to continue')
+                input()
+
+
+        import settings
+        functions.clearConsole()
+        main.showLogo()
+        print(main.bcolors.PRIMARY + 'Info' + main.bcolors.ENDC)
+        print('\n')
+        print(f'{main.bcolors.OK}Your Version is: {main.thisVersion()}{main.bcolors.ENDC}')
+        if(functions.isWindows()):
+            print(f'{main.bcolors.OK}You are running the windows version (Congratulations){main.bcolors.ENDC}')
+        print(f'{main.bcolors.OK}Your mode is: ' + settings.getSetting("mode") + f'{main.bcolors.ENDC}')
+        print(f'{main.bcolors.OK}Your preferred host is: ' + settings.getSetting("prefHost") + f'{main.bcolors.ENDC}')
+        if settings.getSetting("autoUpdate") == 'yes':
+            print(f'{main.bcolors.OK}Auto update is enabled{main.bcolors.ENDC}')
+        else:
+            print(f'{main.bcolors.WARNING}Auto update is disabled{main.bcolors.ENDC}')
+            print(f'{main.bcolors.WARNING}You might miss out on new features and bug fixes{main.bcolors.ENDC}')
+            print(f'{main.bcolors.PRIMARY}Press SPACE to check and download updates{main.bcolors.ENDC}')
+
+
+
+        print('\n')
+        key = input()
+        if key == ' ':
+            update.checkForUpdates(True)
+            time.sleep(2)
+            startUi()
+            return
+
         showInstructions()
         
     elif key == 'q' or key == 'Q':
-        print('Quitting...')
+        print('Quitting, Bye!')
         exit()
     else:
         print(main.bcolors.WARNING + 'Invalid key' + main.bcolors.ENDC)

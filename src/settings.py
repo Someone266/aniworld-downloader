@@ -7,15 +7,18 @@ import functions
 description = {
     "mode": "The mode of AniDown\n'archive' will organize the anime with filestructure, pictures and an offline webserver\n'download' will download anime fast and continue watching",
     "prefHost": "The preferred host to download from",
+    "autoUpdate": "Automatically update the program on startup (Recommended, as this will fix bugs and add new features)"
 }
 options = {
     "mode": ['archive', 'download'],
-    "prefHost": ['voe', 'streamtape']
+    "prefHost": ['voe', 'streamtape'],
+    "autoUpdate": ['yes', 'no']
 }
 # type of the setting (option, text, number)
 type = {
     "mode": "option",
-    "prefHost": "option"
+    "prefHost": "option",
+    "autoUpdate": "option"
 }
 
 def menu():
@@ -86,8 +89,13 @@ def getSetting(key):
 
 def defaultSettings():
     data = {}
+    # open the settings.json file
+    with open('settings.json', 'r') as f:
+        data = json.load(f)
     for key in description:
-        data[key] = options[key][0]
+        if key not in data:
+            data[key] = options[key][0]
+    
     with open('settings.json', 'w') as f:
         json.dump(data, f)
     return data

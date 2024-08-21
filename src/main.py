@@ -15,7 +15,7 @@ import update
 
 # use auto-py-to-exe to convert this to an exe
 # VERSION
-version = "1.1.8"
+version = "1.1.9"
 
 class bcolors:
     PURPLE = '\033[95m' # #9b59b6
@@ -78,10 +78,18 @@ def runAuto():
         
     elif choice != "" and choice != None:
         url = functions.searchAnime(choice)
+        if url == False:
+            print("Quit")
+            # return to the main menu
+            gui.startUi()
+            return
+        elif 'aniworld.to' not in url:
+            print(bcolors.WARNING + 'Invalid url! There was an error with the search' + bcolors.ENDC)
+            time.sleep(2)
+            return
     else:
-        print("Invalid input")
-        time.sleep(2)
-        runAuto()
+        # main menu
+        gui.startUi()
         return
         
     

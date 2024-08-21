@@ -86,6 +86,7 @@ def dmain(path, season, episode):
     
     if fileName is None:
         print(f'{main.bcolors.FAIL}Download failed{main.bcolors.ENDC}')
+        os.chdir('../../')
         time.sleep(2)
         return
     
