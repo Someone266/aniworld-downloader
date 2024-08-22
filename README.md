@@ -80,6 +80,7 @@ _Ich würde mich über einen ⭐️ und einen Follow riesig freuen 😊_
 Diese Bugs werden höhstwarscheinlich im nächsten update behoben.
 
 - Filme können nicht heruntergeladen werden
+- Clean up von Ordnern die von einer älternen AniWorld Down Version erstellt wurden bringt das Programm zum abstürzen
 <!-- - Folgen werden im falschen Ordner heruntergeladen -->
 <!-- - Programmabstürze (z.B. aufgrund von captchas) -->
 - ~~Nur voe als Hoster (streamtape api wird bald hinzugefügt)~~
