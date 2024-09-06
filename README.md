@@ -81,11 +81,21 @@ Diese Bugs werden höhstwarscheinlich im nächsten update behoben.
 
 - Filme können nicht heruntergeladen werden
 - Clean up von Ordnern die von einer älternen AniWorld Down Version erstellt wurden bringt das Programm zum abstürzen
+- Crash bei Auswahl von folgen, z.B. 1-6
 <!-- - Folgen werden im falschen Ordner heruntergeladen -->
 <!-- - Programmabstürze (z.B. aufgrund von captchas) -->
 - ~~Nur voe als Hoster (streamtape api wird bald hinzugefügt)~~
 <!-- - Lokale Seite wird nicht richtig angezeigt -->
 - ~~Update-Loop: Bitte den `assets` Ordner in `anime/` entfernen~~
+
+### Ziele für zukünftige Versionen
+
+- [] Filme herunterladen
+- [] Sprachauswahl, z.B. Dub/Sub
+- [] Download fortsetzen
+- [] Weitere Anbieter (hanashi)
+- [] Stabiler Release
+- Weitere Features können unter _Issues_ vorgeschlagen werden
 
 ## Changelog
 
