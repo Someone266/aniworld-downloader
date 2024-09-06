@@ -90,11 +90,11 @@ Diese Bugs werden höhstwarscheinlich im nächsten update behoben.
 
 ### Ziele für zukünftige Versionen
 
-- [] Filme herunterladen
-- [] Sprachauswahl, z.B. Dub/Sub
-- [] Download fortsetzen
-- [] Weitere Anbieter (hanashi)
-- [] Stabiler Release
+- [ ] Filme herunterladen
+- [ ] Sprachauswahl, z.B. Dub/Sub
+- [ ] Download fortsetzen
+- [ ] Weitere Anbieter (hanashi)
+- [ ] Stabiler Release
 - Weitere Features können unter _Issues_ vorgeschlagen werden
 
 ## Changelog
