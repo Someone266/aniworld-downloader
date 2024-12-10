@@ -7,18 +7,21 @@ import functions
 description = {
     "mode": "The mode of AniDown\n'archive' will organize the anime with filestructure, pictures and an offline webserver\n'download' will download anime fast and continue watching",
     "prefHost": "The preferred host to download from",
-    "autoUpdate": "Automatically update the program on startup (Recommended, as this will fix bugs and add new features)"
+    "autoUpdate": "Automatically update the program on startup (Recommended, as this will fix bugs and add new features)",
+    "threads": "Number of threads to use for downloading (Default: 5)"
 }
 options = {
     "mode": ['archive', 'download'],
     "prefHost": ['voe', 'streamtape'],
-    "autoUpdate": ['yes', 'no']
+    "autoUpdate": ['yes', 'no'],
+    "threads": [5, 1, 2, 3, 4, 6, 7, 8, 9, 10]
 }
 # type of the setting (option, text, number)
 type = {
     "mode": "option",
     "prefHost": "option",
-    "autoUpdate": "option"
+    "autoUpdate": "option",
+    "threads": "number"
 }
 
 def menu():

@@ -9,7 +9,7 @@ from yt_dlp import YoutubeDL
 import base64 # import base64
 
 
-def vdownload(URL):
+def vdownload(URL, folderName):
     URL = str(URL)
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0",
@@ -31,7 +31,7 @@ def vdownload(URL):
         i0 = html_page.text.find(START)
         i1 = html_page.text.find("'",i0+L)
         url = html_page.text[i0+L:i1]
-        return vdownload(url)
+        return vdownload(url, folderName)
 
     name_find = soup.find('meta', attrs={"name":"og:title"})
     name = name_find["content"]
@@ -57,11 +57,13 @@ def vdownload(URL):
     source = replacementStr.join(source.rsplit(strToReplace, 1)) #complicated but needed replacement of the last comma in the source String to make it JSON valid
 
     source_json = json.loads(source) #parsing the JSON
+
+
     try:
         link = source_json["mp4"] #extracting the link to the mp4 file
         link = base64.b64decode(link)
         link = link.decode("utf-8")
-        wget.download(link, out=f"{name}_SS.mp4") #downloading the file
+        wget.download(link, out=f"{os.path.join(folderName, name)}_SS.mp4") #downloading the file
     except KeyError:
         try:
             link = source_json["hls"]
@@ -70,13 +72,12 @@ def vdownload(URL):
 
             name = name +'_SS.mp4'
 
-            ydl_opts = {'outtmpl' : name,}
+            ydl_opts = {'outtmpl' : os.path.join(folderName, name),}
             with YoutubeDL(ydl_opts) as ydl:
                 try:
                     ydl.download(link)
                 except Exception as e:
                     pass
-            delpartfiles()
 
         except KeyError:
             print("Could not find downloadable URL. Voe might have change their site. Check that you are running the latest version of voe-dl, and if so file an issue on GitHub.")
@@ -84,8 +85,3 @@ def vdownload(URL):
 
     print("\n")
     return name
-
-def delpartfiles():
-    path = os.getcwd()
-    for file in glob.iglob(os.path.join(path, '*.part')):
-        os.remove(file)

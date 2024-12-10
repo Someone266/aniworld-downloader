@@ -6,6 +6,7 @@ import bs4
 import js2py
 import re
 from yt_dlp import YoutubeDL
+import os
 
 import dl_voe
 import main
@@ -33,14 +34,14 @@ import main
 # document.getElementById('robotlink').innerHTML = '//streamtape.com/get_'+ ('xcdvideo?id=rkA0Y8vJR6IbP1z&expires=1721824023&ip=FROODHxKD0gN&token=pQWpE1Z5x2Jk').substring(2).substring(1);
 # </script>
 
-def sdownload(url, retry=False):
+def sdownload(url, retry=False, download_folder=None):
     try:
         directUrl, name = sgetDirectUrl(url)
     except Exception as e:
         print(e)
         if not retry:
             print(main.bcolors.WARNING + 'Error getting direct url, retrying...' + main.bcolors.ENDC)
-            return sdownload(url, True)
+            return sdownload(url, True, download_folder)
         else:
             print(main.bcolors.FAIL + 'Failed to get direct url! Try again later or switch to another hoster.' + main.bcolors.ENDC)
             return None
@@ -51,7 +52,7 @@ def sdownload(url, retry=False):
     name = name.replace('\n', '')
     name = name.replace('\r', '')
 
-    ydl_opts = {'outtmpl' : name,}
+    ydl_opts = {'outtmpl' : os.path.join(download_folder, name),}
     with YoutubeDL(ydl_opts) as ydl:
         try:
             ydl.download(directUrl)

@@ -8,12 +8,16 @@ import sys
 import bs4
 import http.server
 import shutil
+import threading
 
 import main
 import gui
 import main
 import dl_download
 import settings
+
+global threadCount
+threadCount = 0
 
 def setTitle(title = 'AniWorld Scraper'):
     # set the title of the console
@@ -449,7 +453,9 @@ def getEpisodesFromSeason(url, season):
     episodes = len(episodes) - 1
     return episodes
 
-def downloadEpisode(season, episode, info = None):
+def downloadEpisode(season, episode, info = None, url = None):
+    if url is not None:
+        data = getEpisodeDownloads(url, season, episode, info = info)
     clearConsole()
     main.showLogo()
     if info is None:
@@ -467,7 +473,11 @@ def downloadEpisode(season, episode, info = None):
     # print(streamUrl)
     dl_download.dmain(pathname, season, episode)
 
-def downloadSeason(season, info = None):
+def downloadSeason(season, info = None, url = None):
+
+    if url is not None:
+        data = getSeasonDownloads(url, season, info = info)
+
     if info is None:
         with open('stream.json', 'r') as f:
             data = json.load(f)
@@ -478,14 +488,28 @@ def downloadSeason(season, info = None):
         with open(pathname + '/stream.json', 'r') as f:
             data = json.load(f)
     # get the stream url from the json file
+    allowedThreads = settings.getSetting('threads')
     for episode in data["voe"][str(season)]:
         # streamUrl = data[str(season)][episode]
         clearConsole()
         main.showLogo()
-        print(f'Downloading season {season} episode {episode}...')
-        updateProgress(int(episode) / len(data["voe"][str(season)]))
-        print("\n")
-        dl_download.dmain(pathname, season, episode)
+        def seasonDownloadThread(season, episode):
+            
+            try:
+                print(f'Downloading season {season} episode {episode}...')
+                # updateProgress(int(episode) / len(data["voe"][str(season)]))
+                print("\n")
+                dl_download.dmain(pathname, season, episode)
+            except Exception as e:
+                print(e)
+                print(f'Error downloading episode {episode}')
+                return
+        thread = threading.Thread(target=seasonDownloadThread, args=(season, episode))
+        thread.start()
+        while threading.active_count() > allowedThreads:
+            time.sleep(1)
+    return
+            
 
 def downloadRange(season, start, end, info = None):
     if info is None:
@@ -659,7 +683,7 @@ def serveContent():
     Handler = http.server.SimpleHTTPRequestHandler
     web_dir = os.path.join(os.getcwd(), 'anime')
     os.chdir(web_dir)
-    with http.server.HTTPServer(("", PORT), Handler) as httpd:
+    with http.server.HTTPServer(("0.0.0.0", PORT), Handler) as httpd:
         print("serving at http://localhost:" + str(PORT) + "/")
         # get the network ip assigned to the computer (usually 192.168.1.x)
 
@@ -819,8 +843,12 @@ def buildDownloadsJson():
 
     data = {}
     for folder in folders:
+        # check if video folder exists
+        if not os.path.exists(os.path.join(os.getcwd(), 'anime', folder, 'video')):
+            continue
+
         # get all files in the video folder
-        videos = [f for f in os.listdir(os.path.join(os.getcwd(), 'anime', folder, 'video')) if os.path.isfile(os.path.join(os.getcwd(), 'anime', folder, 'video', f))]
+        # videos = [f for f in os.listdir(os.path.join(os.getcwd(), 'anime', folder, 'video')) if os.path.isfile(os.path.join(os.getcwd(), 'anime', folder, 'video', f))]
         # get all seasons
         seasons = [f for f in os.listdir(os.path.join(os.getcwd(), 'anime', folder, 'video')) if os.path.isdir(os.path.join(os.getcwd(), 'anime', folder, 'video', f))]
         data[folder] = {}

@@ -13,9 +13,8 @@ import functions
 import gui
 import update
 
-# use auto-py-to-exe to convert this to an exe
 # VERSION
-version = "1.1.9"
+version = "1.2.0"
 
 class bcolors:
     PURPLE = '\033[95m' # #9b59b6
@@ -40,7 +39,7 @@ def runMain(url):
     seasons = info['seasons']
     print(seasons)
     for season in range(1, seasons + 1):
-        functions.downloadSeason(season, info)
+        functions.downloadSeason(season, info, url)
 
     functions.clean()
     showLogo()
@@ -95,8 +94,7 @@ def runAuto():
     
     info = functions.getInfo(url)
     functions.setup(info)
-    for season in info['episodes']:
-        functions.getSeasonDownloads(url, season, info['episodes'][season], info)
+
         
     runAuto1(url, info)
     return
@@ -121,28 +119,30 @@ def runAuto1(url, info):
             runAuto1(url, info)
             return
         if episode == 0:
-            functions.downloadSeason(season, info)
+            functions.downloadSeason(season, info, url)
         # if episode contains a range
-        elif '-' in str(episode):
-            start = int(episode.split('-')[0])
-            end = int(episode.split('-')[1])
-            if start < 1 or end > info['episodes'][season]:
-                print(bcolors.FAIL + "Invalid range" + bcolors.ENDC)
-                time.sleep(2)
-                runAuto1(url, info)
-                return
-            functions.downloadRange(season, start, end, info)
+        elif '-' in str(episode) or ',' in str(episode):
+            if '-' in str(episode):
+                start = int(episode.split('-')[0])
+                end = int(episode.split('-')[1])
+                for e in range(start, end + 1):
+                    functions.downloadEpisode(season, e, info, url)
+            elif ',' in str(episode):
+                # split the string by comma, loop through the list and download each episode
+                episodes = episode.split(',')
+                for e in episodes:
+                    functions.downloadEpisode(season, int(e), info, url)
         else:
             if episode < 1 or episode > info['episodes'][season]:
                 print(bcolors.FAIL + "Invalid episode" + bcolors.ENDC)
                 time.sleep(2)
                 runAuto1(url, info)
                 return
-            functions.downloadEpisode(season, episode, info)
+            functions.downloadEpisode(season, episode, info, url)
     else:
         print(bcolors.OK + "Downloading all episodes" + bcolors.ENDC)
         for season in range(1, info['seasons'] + 1):
-            functions.downloadSeason(season, info)
+            functions.downloadSeason(season, info, url)
 
     
     print(bcolors.OK + "Download complete" + bcolors.ENDC)
