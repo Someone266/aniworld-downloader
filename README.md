@@ -42,6 +42,10 @@ Lade `main.py` herunter und installiere die benötigten Python Pakete (`requirem
 
 ### iOS
 
+Ich empfehle die App [Sora](https://github.com/cranci1/Sora), jedoch kann man damit (noch) keine Folgen herunterladen.
+
+**Alternativ:**
+
 Lade [A-Shell mini](https://apps.apple.com/de/app/a-shell-mini/id1543537943) und führe dieses Skript aus:
 
 ```bash
